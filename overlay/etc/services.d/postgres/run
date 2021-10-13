@@ -33,7 +33,7 @@ else
     db-init
 
     # generate init script
-    INIT_FILE=mktemp
+    INIT_FILE=`mktemp` || exit 1
     bf-ch -o postgres:postgres ${INIT_FILE}
     bf-debug "Generating initialisation script into ${INIT_FILE}..."
     s6-setuidgid postgres ${POSTGRESQL_LIB}/generate-init-command "${INIT_FILE}"
