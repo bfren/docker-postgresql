@@ -39,6 +39,7 @@ bf-debug "Creating PostgreSQL directories."
 
 mkdir -p /var/lib/postgresql/data
 mkdir /var/lib/postgresql/backup
+mkdir /run/postgresql
 
 
 #======================================================================================================================
