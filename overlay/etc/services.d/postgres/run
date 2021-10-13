@@ -33,8 +33,9 @@ else
     db-init
 
     # generate init script
-    INIT_FILE=mtkemp
-    bf-debug "Generating initialisation script ${INIT_FILE}..."
+    INIT_FILE=mktemp
+    bf-ch -o postgres:postgres ${INIT_FILE}
+    bf-debug "Generating initialisation script into ${INIT_FILE}..."
     s6-setuidgid postgres ${POSTGRESQL_LIB}/generate-init-command "${INIT_FILE}"
     INIT_CMD=`cat ${INIT_FILE}`
 
