@@ -28,6 +28,11 @@ else
     # check for application user and password
     [[ -z "${POSTGRESQL_USERNAME-}" || -z "${POSTGRESQL_PASSWORD-}" ]] && bf-error "POSTGRESQL_USERNAME and POSTGRESQL_PASSWORD must be set."
 
+    # add user with password
+    bf-debug "Adding user ${POSTGRESQL_USERNAME}..."
+    bf-adduser ${POSTGRESQL_USERNAME}
+    echo -e "${POSTGRESQL_PASSWORD}\n${POSTGRESQL_PASSWORD}" | passwd ${POSTGRESQL_USERNAME}
+
     # initialise database
     bf-debug "Running db-init..."
     initdb -D "${POSTGRESQL_DATA}"

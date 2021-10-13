@@ -11,9 +11,6 @@ export BF_E=`basename ${0}`
 [[ -z "${1-}" ]] && bf-error "You must define the path to the initialisation file."
 INIT_FILE=${1}
 
-[[ -z "${POSTGRESQL_USERNAME-}" || -z "${POSTGRESQL_PASSWORD-}" ]] \
-    && bf-error "POSTGRESQL_USERNAME and POSTGRESQL_PASSWORD must be set."
-
 
 #======================================================================================================================
 # Create the user.
@@ -34,7 +31,7 @@ echo "END IF; " >> ${INIT_FILE}
 create_database () {
 
     # create database
-    echo "createdb ${1}; " >> ${INIT_FILE}
+    echo "createdb ${1} -O ${1}; " >> ${INIT_FILE}
 
 }
 
