@@ -1,0 +1,18 @@
+#!/usr/bin/with-contenv sh
+
+set -euo pipefail
+export BF_E=`basename ${0}`
+
+
+#======================================================================================================================
+# Add user with password.
+#======================================================================================================================
+
+# check for application user and password
+[[ -z "${POSTGRESQL_USERNAME-}" || -z "${POSTGRESQL_PASSWORD-}" ]] && bf-error "POSTGRESQL_USERNAME and POSTGRESQL_PASSWORD must be set."
+
+# add user
+bf-echo "Adding user ${POSTGRESQL_USERNAME}..."
+bf-adduser ${POSTGRESQL_USERNAME}
+echo -e "${POSTGRESQL_PASSWORD}\n${POSTGRESQL_PASSWORD}" | passwd ${POSTGRESQL_USERNAME}
+bf-done
