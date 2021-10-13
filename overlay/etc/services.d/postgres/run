@@ -5,43 +5,7 @@ export BF_E="${PWD##*/}/$(basename ${0})"
 
 
 #======================================================================================================================
-# If the PG_VERSION file exists, the server has already been initialised.
+# Run as PostgreSQL user.
 #======================================================================================================================
 
-if [ -f ${POSTGRESQL_DATA}/PG_VERSION ] ; then
-
-    # start database
-    bf-echo "Starting PostgreSQL."
-    postgres -D "${POSTGRESQL_DATA}"
-
-
-#======================================================================================================================
-# Otherwise:
-#   - check for application username and password
-#   - initialise database
-#   - generate initialisation file
-#   - run server using initialisation file
-#======================================================================================================================
-
-else
-
-    # check for application user and password
-    [[ -z "${POSTGRESQL_USERNAME-}" || -z "${POSTGRESQL_PASSWORD-}" ]] && bf-error "POSTGRESQL_USERNAME and POSTGRESQL_PASSWORD must be set."
-
-    # initialise database
-    bf-debug "Running db-init..."
-    db-init
-
-    # generate init script
-    INIT_FILE=`mktemp` || exit 1
-    bf-ch -o postgres:postgres ${INIT_FILE}
-    bf-debug "Generating initialisation script into ${INIT_FILE}..."
-    s6-setuidgid postgres ${POSTGRESQL_LIB}/generate-init-command "${INIT_FILE}"
-    INIT_CMD=`cat ${INIT_FILE}`
-
-    # start database with init command
-    bf-echo "Starting PostgreSQL with initialisation command."
-    postgres -D "${POSTGRESQL_DATA}" \
-        && psql --command "${INIT_CMD}"
-
-fi
+s6-setuidgid postgres ${POSTGRESQL_LIB}/run

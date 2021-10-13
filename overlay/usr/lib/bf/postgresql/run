@@ -1,0 +1,51 @@
+#!/usr/bin/with-contenv sh
+
+set -euo pipefail
+export BF_E=`basename ${0}`
+
+
+#======================================================================================================================
+# If the PG_VERSION file exists, the server has already been initialised.
+#======================================================================================================================
+
+if [ -f ${POSTGRESQL_DATA}/PG_VERSION ] ; then
+
+    # start database
+    bf-echo "Starting PostgreSQL."
+    postgres -D "${POSTGRESQL_DATA}"
+
+
+#======================================================================================================================
+# Otherwise:
+#   - check for application username and password
+#   - initialise database
+#   - generate initialisation file
+#   - run server using initialisation file
+#======================================================================================================================
+
+else
+
+    # check for application user and password
+    [[ -z "${POSTGRESQL_USERNAME-}" || -z "${POSTGRESQL_PASSWORD-}" ]] && bf-error "POSTGRESQL_USERNAME and POSTGRESQL_PASSWORD must be set."
+
+    # initialise database
+    bf-debug "Running db-init..."
+    initdb -D "${POSTGRESQL_DATA}"
+
+    # enable remote connections
+    bf-debug "Enabling remote connections..."
+    echo "host all all 0.0.0.0/0 md5" >> ${POSTGRESQL_DATA}/pg_hba.conf
+    echo "listen_addresses='*'" >> ${POSTGRESQL_DATA}/postgresql.conf
+
+    # generate init script
+    INIT_FILE=`mktemp` || exit 1
+    bf-ch -o postgres:postgres ${INIT_FILE}
+    bf-debug "Saving initialisation script into ${INIT_FILE}..."
+    ${POSTGRESQL_LIB}/generate-init-command "${INIT_FILE}"
+    INIT_CMD=`cat ${INIT_FILE}`
+
+    # start database with init command
+    bf-echo "Starting PostgreSQL with initialisation command."
+    postgres -D "${POSTGRESQL_DATA}" & psql --command "${INIT_CMD}"
+
+fi
