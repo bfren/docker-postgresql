@@ -8,13 +8,11 @@ export BF_E=`basename ${0}`
 # Check for required variables.
 #======================================================================================================================
 
-[[ -z "${1-}" ]] \
-    && bf-error "You must define the path to the initialisation file."
+[[ -z "${1-}" ]] && bf-error "You must define the path to the initialisation file."
 INIT_FILE=${1}
 
 [[ -z "${POSTGRESQL_USERNAME-}" || -z "${POSTGRESQL_PASSWORD-}" ]] \
     && bf-error "POSTGRESQL_USERNAME and POSTGRESQL_PASSWORD must be set."
-}
 
 
 #======================================================================================================================
