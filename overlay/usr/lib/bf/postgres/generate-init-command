@@ -1,0 +1,64 @@
+#!/usr/bin/with-contenv sh
+
+set -euo pipefail
+export BF_E=`basename ${0}`
+
+
+#======================================================================================================================
+# Check for required variables.
+#======================================================================================================================
+
+[[ -z "${1-}" ]] \
+    && bf-error "You must define the path to the initialisation file."
+INIT_FILE=${1}
+
+[[ -z "${POSTGRESQL_USERNAME-}" || -z "${POSTGRESQL_PASSWORD-}" ]] \
+    && bf-error "POSTGRESQL_USERNAME and POSTGRESQL_PASSWORD must be set."
+}
+
+
+#======================================================================================================================
+# Create the user.
+#======================================================================================================================
+
+echo "IF NOT EXISTS (SELECT FROM pg_catalog.pg_user WHERE usename = '${POSTGRESQL_USERNAME}') THEN " >> ${INIT_FILE}
+echo "CREATE USER ${POSTGRESQL_USERNAME} WITH SUPERUSER ENCRYPTED PASSWORD '${POSTGRESQL_PASSWORD}'; " >> ${INIT_FILE}
+echo "END IF; " >> ${INIT_FILE}
+
+
+#======================================================================================================================
+# Create a database.
+#
+# Arguments
+#   1: database name
+#======================================================================================================================
+
+create_database () {
+
+    # create database
+    echo "createdb ${1}; " >> ${INIT_FILE}
+
+}
+
+
+#======================================================================================================================
+# Create application databases.
+#======================================================================================================================
+
+if [ ! -z "${POSTGRESQL_DATABASE-}" ] ; then
+
+    bf-debug " .. add application databases:"
+    DATABASES=$(echo ${POSTGRESQL_DATABASE} | tr "," "\n")
+
+    for DATABASE in ${DATABASES} ; do
+        bf-debug " .. ${DATABASE}."
+        create_database "${DATABASE}"
+    done
+
+# no database specified so use username as database name
+else
+
+    bf-debug " .. add application database: ${POSTGRESQL_USERNAME}."
+    create_database "${POSTGRESQL_USERNAME}"
+
+fi

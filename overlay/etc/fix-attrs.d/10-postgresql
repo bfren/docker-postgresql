@@ -1,0 +1,2 @@
+/var/lib/postgres true postgres:postgres 0770 0750
+/usr/local/bin/db-* false root:root 0500 0500
