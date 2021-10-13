@@ -42,6 +42,6 @@ else
 
     # start database with init command
     bf-echo "Starting PostgreSQL with initialisation command."
-    postgres -D "${POSTGRESQL_DATA}" && psql --command "${INIT_CMD}"
+    postgres -D "${POSTGRESQL_DATA}" & psql --command "${INIT_CMD}"
 
 fi
