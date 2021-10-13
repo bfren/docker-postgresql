@@ -5,24 +5,10 @@ export BF_E=`basename ${0}`
 
 
 #======================================================================================================================
-# If the PG_VERSION file exists, the server has already been initialised.
+# If the PG_VERSION file does not exist, the server needs to be initialised.
 #======================================================================================================================
 
-if [ -f ${POSTGRESQL_DATA}/PG_VERSION ] ; then
-
-    # start database
-    bf-echo "Starting PostgreSQL."
-    postgres -D "${POSTGRESQL_DATA}"
-
-
-#======================================================================================================================
-# Otherwise:
-#   - initialise database
-#   - generate init script
-#   - start database with init command
-#======================================================================================================================
-
-else
+if [ ! -f ${POSTGRESQL_DATA}/PG_VERSION ] ; then
 
     # initialise database
     bf-debug "Running db-init..."
@@ -42,6 +28,12 @@ else
 
     # start database with init command
     bf-echo "Starting PostgreSQL with initialisation command."
-    postgres -D "${POSTGRESQL_DATA}" & psql --command "${INIT_CMD}"
+    pg_ctl -D "${POSTGRESQL_DATA}" -o "-c listen_addresses=''" -w start
+    psql --command "${INIT_CMD}"
+    pg_ctl -D "${POSTGRESQL_DATA}" -m fast -w stop
 
 fi
+
+# start database
+bf-echo "Starting PostgreSQL."
+postgres -D "${POSTGRESQL_DATA}"
