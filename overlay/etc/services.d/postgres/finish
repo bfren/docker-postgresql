@@ -7,4 +7,5 @@ set -euo pipefail
 # Show helpful log message.
 #======================================================================================================================
 
+pg_ctl stop -D ${POSTGRESQL_DATA}
 bf-svc-finish -s ${PWD##*/} -t

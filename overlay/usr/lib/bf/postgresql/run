@@ -16,7 +16,7 @@ if [ ! -f ${POSTGRESQL_DATA}/PG_VERSION ] ; then
 
     # start server for initialisation
     bf-echo "Starting PostgreSQL for initialisation."
-    pg_ctl -D "${POSTGRESQL_DATA}" -w start
+    pg_ctl start -D "${POSTGRESQL_DATA}"
 
     # create specified role
     bf-debug "Creating role ${POSTGRESQL_USERNAME}..."
@@ -43,7 +43,7 @@ if [ ! -f ${POSTGRESQL_DATA}/PG_VERSION ] ; then
     fi
 
     # stop server
-    pg_ctl -D "${POSTGRESQL_DATA}" -m fast -w stop
+    pg_ctl stop -D "${POSTGRESQL_DATA}"
 
     # enable remote connections
     bf-debug "Enabling remote connections..."
