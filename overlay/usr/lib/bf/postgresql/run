@@ -15,12 +15,12 @@ if [ ! -f ${POSTGRESQL_DATA}/PG_VERSION ] ; then
     initdb -D "${POSTGRESQL_DATA}"
 
     # start server for initialisation
-    bf-echo "Starting PostgreSQL without networking for initialisation."
+    bf-echo "Starting PostgreSQL for initialisation."
     pg_ctl -D "${POSTGRESQL_DATA}" -w start
 
     # create specified role
-    bf-debug "Creating user ${POSTGRESQL_USERNAME}..."
-    psql --command "CREATE ROLE ${POSTGRESQL_USERNAME} WITH SUPERUSER ENCRYPTED PASSWORD '${POSTGRESQL_PASSWORD}';"
+    bf-debug "Creating role ${POSTGRESQL_USERNAME}..."
+    psql --command "CREATE ROLE ${POSTGRESQL_USERNAME} WITH SUPERUSER LOGIN ENCRYPTED PASSWORD '${POSTGRESQL_PASSWORD}';"
 
     # create database(s)
     bf-debug "Creating databases..."
