@@ -10,27 +10,52 @@ export BF_E=`basename ${0}`
 
 if [ ! -f ${POSTGRESQL_DATA}/PG_VERSION ] ; then
 
-    # initialise database
+    # initialise server
     bf-debug "Running db-init..."
     initdb -D "${POSTGRESQL_DATA}"
+
+    # start server for initialisation
+    bf-echo "Starting PostgreSQL without networking for initialisation."
+    pg_ctl -D "${POSTGRESQL_DATA}" -w start
+
+    # create specified role
+    bf-debug "Creating user ${POSTGRESQL_USERNAME}..."
+    CREATE_USER=$(cat <<'EOF'
+        IF NOT EXISTS (SELECT FROM pg_catalog.pg_user WHERE usename = '${POSTGRESQL_USERNAME}') THEN
+            CREATE ROLE ${POSTGRESQL_USERNAME} WITH SUPERUSER ENCRYPTED PASSWORD '${POSTGRESQL_PASSWORD}';
+        END IF;
+EOF
+    )
+
+    psql --command "${CREATE_USER}"
+
+    # create database(s)
+    bf-debug "Creating databases..."
+    if [ ! -z "${POSTGRESQL_DATABASE-}" ] ; then
+
+        bf-debug " .. specified databases:"
+        DATABASES=$(echo ${POSTGRESQL_DATABASE} | tr "," "\n")
+
+        for DATABASE in ${DATABASES} ; do
+            bf-debug " .. ${DATABASE}."
+            createdb "${DATABASE}" -O "${POSTGRESQL_USERNAME}"
+        done
+
+    # no database specified so use username as database name
+    else
+
+        bf-debug " .. application database: ${POSTGRESQL_USERNAME}."
+        createdb "${POSTGRESQL_USERNAME}" -O "${POSTGRESQL_USERNAME}"
+
+    fi
+
+    # stop server
+    pg_ctl -D "${POSTGRESQL_DATA}" -m fast -w stop
 
     # enable remote connections
     bf-debug "Enabling remote connections..."
     echo "host all all 0.0.0.0/0 md5" >> ${POSTGRESQL_DATA}/pg_hba.conf
     echo "listen_addresses='*'" >> ${POSTGRESQL_DATA}/postgresql.conf
-
-    # generate init script
-    INIT_FILE=`mktemp` || exit 1
-    bf-ch -o postgres:postgres ${INIT_FILE}
-    bf-debug "Saving initialisation script into ${INIT_FILE}..."
-    ${POSTGRESQL_LIB}/generate-init-command "${INIT_FILE}"
-    INIT_CMD=`cat ${INIT_FILE}`
-
-    # start database with init command
-    bf-echo "Starting PostgreSQL with initialisation command."
-    pg_ctl -D "${POSTGRESQL_DATA}" -o "-c listen_addresses=''" -w start
-    psql --command "${INIT_CMD}"
-    pg_ctl -D "${POSTGRESQL_DATA}" -m fast -w stop
 
 fi
 
