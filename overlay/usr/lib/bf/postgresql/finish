@@ -1,11 +1,11 @@
 #!/usr/bin/with-contenv sh
 
 set -euo pipefail
+export BF_E=`basename ${0}`
 
 
 #======================================================================================================================
-# Show helpful log message.
+# Stop the server gracefully.
 #======================================================================================================================
 
-s6-setuidgid postgres ${POSTGRESQL_LIB}/finish
-bf-svc-finish -s ${PWD##*/} -t
+pg_ctl stop -D ${POSTGRESQL_DATA}
