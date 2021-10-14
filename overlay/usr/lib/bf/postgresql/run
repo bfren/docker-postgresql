@@ -20,14 +20,7 @@ if [ ! -f ${POSTGRESQL_DATA}/PG_VERSION ] ; then
 
     # create specified role
     bf-debug "Creating user ${POSTGRESQL_USERNAME}..."
-    CREATE_USER=$(cat <<'EOF'
-        IF NOT EXISTS (SELECT FROM pg_catalog.pg_user WHERE usename = '${POSTGRESQL_USERNAME}') THEN
-            CREATE ROLE ${POSTGRESQL_USERNAME} WITH SUPERUSER ENCRYPTED PASSWORD '${POSTGRESQL_PASSWORD}';
-        END IF;
-EOF
-    )
-
-    psql --command "${CREATE_USER}"
+    psql --command "CREATE ROLE ${POSTGRESQL_USERNAME} WITH SUPERUSER ENCRYPTED PASSWORD '${POSTGRESQL_PASSWORD}';"
 
     # create database(s)
     bf-debug "Creating databases..."
