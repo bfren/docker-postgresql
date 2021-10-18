@@ -16,7 +16,7 @@ for FILE in ${POSTGRESQL_BACKUP}/*.sql ; do
     DATABASE="${NAME%.*}"
 
     # create database if it does not exist
-    EXISTS=$(psql -l | grep "${DATABASE}" | wc -l)
+    EXISTS=$(db-exists "${DATABASE}")
     if [ "${EXISTS}" = "0" ] ; then
         bf-echo " .. creating '${DATABASE}'."
         createdb "${DATABASE}" -O "${POSTGRESQL_USERNAME}"\
