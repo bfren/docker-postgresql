@@ -1,0 +1,27 @@
+#!/usr/bin/with-contenv bash
+
+set -euo pipefail
+export BF_E=`basename ${0}`
+
+
+#======================================================================================================================
+# Get import files (from backup directory).
+#======================================================================================================================
+
+bf-echo "Importing SQL files from ${POSTGRESQL_BACKUP}..."
+for FILE in ${POSTGRESQL_BACKUP}/*.sql ; do
+
+    # split out database name from file
+    NAME=$(basename -- "${FILE}")
+    DATABASE="${NAME%.*}"
+
+    # check if database exists
+    EXISTS=$(psql --command "SELECT datname FROM pg_catalog.pg_database WHERE datname='dbname';")
+
+    # execute file
+    bf-echo " .. importing '${DATABASE}'."
+    mariadb -uroot -p${MARIADB_ROOT_PASSWORD} "${DATABASE}" < ${FILE} \
+        || bf-notok "  . something went wrong."
+
+done
+bf-done

@@ -1,0 +1,26 @@
+#!/usr/bin/with-contenv bash
+
+set -euo pipefail
+export BF_E=`basename ${0}`
+
+
+#======================================================================================================================
+# Check arguments.
+#   1   Database name
+#======================================================================================================================
+
+[[ -z "${1-}" ]] && bf-error "You must provide the name of the database to export."
+DATABASE=${1}
+
+[[ ! -d "${POSTGRESQL_DATA}/${DATABASE}" ]] && bf-error "Database '${DATABASE}' does not exist."
+EXPORT_FILE="${POSTGRESQL_BACKUP}/${DATABASE}.sql"
+
+
+#======================================================================================================================
+# Dump database to file.
+#======================================================================================================================
+
+bf-echo "Exporting database '${DATABASE}' to ${EXPORT_FILE}..."
+pg_dump "${DATABASE}" > "${EXPORT_FILE}" \
+    || bf-error " .. unable to export database '${DATABASE}'."
+bf-done
