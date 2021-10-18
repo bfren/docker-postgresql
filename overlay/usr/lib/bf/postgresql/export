@@ -12,7 +12,13 @@ export BF_E=`basename ${0}`
 [[ -z "${1-}" ]] && bf-error "You must provide the name of the database to export."
 DATABASE=${1}
 
-[[ ! -d "${POSTGRESQL_DATA}/${DATABASE}" ]] && bf-error "Database '${DATABASE}' does not exist."
+
+#======================================================================================================================
+# Check database exists.
+#======================================================================================================================
+
+EXISTS=$(psql -l | grep "${DATABASE}" | wc -l)
+[[ "${EXISTS}" = "0" ]] && bf-error "Database '${DATABASE}' does not exist."
 EXPORT_FILE="${POSTGRESQL_BACKUP}/${DATABASE}.sql"
 
 
