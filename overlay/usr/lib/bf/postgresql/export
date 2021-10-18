@@ -17,7 +17,7 @@ DATABASE=${1}
 # Check database exists.
 #======================================================================================================================
 
-EXISTS=$(./exists "${DATABASE}")
+EXISTS=$(db-exists "${DATABASE}")
 [[ "${EXISTS}" = "0" ]] && bf-error "Database '${DATABASE}' does not exist."
 
 
