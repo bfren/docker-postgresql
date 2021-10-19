@@ -8,5 +8,4 @@ export BF_E=`basename ${0}`
 # Run library restore executable.
 #======================================================================================================================
 
-s6-setuidgid postgres ${POSTGRESQL_LIB}/restore
-bf-fix-attrs
+s6-setuidgid postgres ${POSTGRESQL_LIB}/restore "${1-}"
