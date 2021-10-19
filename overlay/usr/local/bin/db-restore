@@ -5,7 +5,35 @@ export BF_E=`basename ${0}`
 
 
 #======================================================================================================================
-# Run library restore executable.
+# Check arguments.
+#   1   Backup date
 #======================================================================================================================
 
-s6-setuidgid postgres ${POSTGRESQL_LIB}/restore "${1-}"
+[[ -z "${1-}" ]] && bf-error "You must provide the date/time of the backup to restore."
+DATE=${1}
+
+
+#======================================================================================================================
+# Look for compressed dump file.
+#======================================================================================================================
+
+BACKUP_PATH="${POSTGRESQL_BACKUP}/${DATE}"
+bf-echo "Looking for backup in ${BACKUP_PATH}..."
+
+COMPRESSED_DUMP_FILE="${BACKUP_PATH}/${POSTGRESQL_BACKUP_FILENAME}.gz"
+if [ -f "${COMPRESSED_DUMP_FILE}" ] ; then
+    bf-debug " .. decompressing ${COMPRESSED_DUMP_FILE}"
+    gzip -d "${COMPRESSED_DUMP_FILE}"
+fi
+
+DUMP_FILE="${BACKUP_PATH}/${POSTGRESQL_BACKUP_FILENAME}.sql"
+[[ ! -f "${DUMP_FILE}" ]] && bf-error " .. ${DUMP_FILE} does not exist."
+bf-ok " .. found ${DUMP_FILE}."
+
+
+#======================================================================================================================
+# Move dump file to restore location and restart.
+#======================================================================================================================
+
+mv ${DUMP_FILE} ${POSTGRESQL_RESTORE_PATH}
+bf-svc-terminate

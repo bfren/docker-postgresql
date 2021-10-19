@@ -1,0 +1,28 @@
+#!/usr/bin/with-contenv sh
+
+set -euo pipefail
+export BF_E=`basename ${0}`
+
+
+#======================================================================================================================
+# Initialise server, create role and application database(s), enable remote connections.
+#======================================================================================================================
+
+# initialise server
+bf-debug "Running db-init..."
+initdb -D "${POSTGRESQL_DATA}"
+
+# start server for restore
+bf-echo "Starting PostgreSQL for restore."
+pg_ctl start -D "${POSTGRESQL_DATA}"
+
+# run restore
+psql -f "${POSTGRESQL_RESTORE_PATH}"
+
+# stop server
+pg_ctl stop -D "${POSTGRESQL_DATA}"
+
+# enable remote connections
+bf-debug "Enabling remote connections..."
+echo "host all all 0.0.0.0/0 md5" >> ${POSTGRESQL_DATA}/pg_hba.conf
+echo "listen_addresses='*'" >> ${POSTGRESQL_DATA}/postgresql.conf
