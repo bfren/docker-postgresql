@@ -13,20 +13,25 @@ bf-debug "Backup: ${DATE}."
 
 
 #======================================================================================================================
-# Dump database cluster to a temporary folder and compress.
+# Create temporary directory for backups.
 #======================================================================================================================
 
 TEMP_BACKUP_PATH=$(mktemp -d -t backup.XXXXXX) || bf-error "Unable to make temporary backup directory."
-bf-echo "Backing up database cluster to ${TEMP_BACKUP_PATH}..."
+bf-echo "Backing up server to ${TEMP_BACKUP_PATH}..."
+
+
+#======================================================================================================================
+# Dump database cluster and compress.
+#======================================================================================================================
 
 # dump cluster
-DUMP_FILE="${TEMP_BACKUP_PATH}/backup.sql"
-bf-debug " .. dumping to ${DUMP_FILE}"
+DUMP_FILE="${TEMP_BACKUP_PATH}/${POSTGRESQL_BACKUP_FILENAME}.sql"
+bf-debug " .. dumping cluster to ${DUMP_FILE}"
 pg_dumpall > "${DUMP_FILE}"
 
 # compress file
 if [ "${POSTGRESQL_BACKUP_COMPRESS_FILES}" = "1" ] ; then
-    bf-debug " .. compressing file"
+    bf-debug " .. compressing cluster backup"
     gzip ${DUMP_FILE}
 fi
 
@@ -49,10 +54,9 @@ bf-done
 
 if [ "${POSTGRESQL_BACKUP_KEEP_FOR_DAYS}" -gt 0 ] ; then
 
-    bf-echo "Deleting backups older than ${MPOSTGRESQL_BACKUP_KEEP_FOR_DAYS} days..."
+    bf-echo "Deleting backups older than ${POSTGRESQL_BACKUP_KEEP_FOR_DAYS} days..."
     MMIN=$((60*24*${POSTGRESQL_BACKUP_KEEP_FOR_DAYS}))
     find ${POSTGRESQL_BACKUP}/* -type d -mmin +${MMIN} | xargs rm -rf
     bf-done
 
 fi
-

@@ -9,7 +9,8 @@ export BF_E=`basename ${0}`
 #======================================================================================================================
 
 # check for application user and password
-[[ -z "${POSTGRESQL_USERNAME-}" || -z "${POSTGRESQL_PASSWORD-}" ]] && bf-error "POSTGRESQL_USERNAME and POSTGRESQL_PASSWORD must be set."
+[[ -z "${POSTGRESQL_USERNAME-}" || -z "${POSTGRESQL_PASSWORD-}" ]] \
+    && bf-error "POSTGRESQL_USERNAME and POSTGRESQL_PASSWORD must be set."
 
 # add user
 bf-echo "Adding user ${POSTGRESQL_USERNAME}..."

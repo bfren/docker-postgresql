@@ -1,0 +1,53 @@
+#!/usr/bin/with-contenv sh
+
+set -euo pipefail
+export BF_E=`basename ${0}`
+
+
+#======================================================================================================================
+# Check arguments.
+#   1   Backup date
+#======================================================================================================================
+
+[[ -z "${1-}" ]] && bf-error "You must provide the date/time of the backup to restore."
+DATE=${1}
+
+
+#======================================================================================================================
+# Look for compressed dump file.
+#======================================================================================================================
+
+BACKUP_PATH="${POSTGRESQL_BACKUP}/${DATE}"
+bf-echo "Looking for backup in ${BACKUP_PATH}..."
+
+COMPRESSED_DUMP_FILE="${BACKUP_PATH}/${POSTGRESQL_BACKUP_FILENAME}.gz"
+if [ -f "${COMPRESSED_DUMP_FILE}" ] ; then
+    bf-debug " .. decompressing ${COMPRESSED_DUMP_FILE}"
+    gzip -d "${COMPRESSED_DUMP_FILE}"
+fi
+
+DUMP_FILE="${BACKUP_PATH}/${POSTGRESQL_BACKUP_FILENAME}.sql"
+[[ ! -f "${DUMP_FILE}" ]] && bf-error " .. ${DUMP_FILE} does not exist."
+bf-ok " .. found ${DUMP_FILE}."
+
+
+#======================================================================================================================
+# Process:
+#   - remove files
+#   - reinitialise server
+#   - restore dump
+#======================================================================================================================
+
+# remove files
+bf-echo "Removing files from ${POSTGRESQL_DATA}."
+bf-rmrf "${POSTGRESQL_DATA}/*"
+
+# reinitialise server
+bf-echo "Initialising server."
+initdb -D "${POSTGRESQL_DATA}"
+
+# restore backup
+bf-echo "Restoring from backup."
+psql -f "${DUMP_FILE}"
+
+bf-done
