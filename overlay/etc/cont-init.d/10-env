@@ -11,9 +11,8 @@ export BF_E=`basename ${0}`
 # Library configuration
 bf-env "POSTGRESQL_LIB" "${BF_LIB}/postgresql"
 
-POSTGRESQL_ROOT=/var/lib/postgresql
-bf-env "POSTGRESQL_DATA" "${POSTGRESQL_ROOT}/data"
-bf-env "POSTGRESQL_BACKUP" "${POSTGRESQL_ROOT}/backup"
+bf-env "POSTGRESQL_DATA" "/data"
+bf-env "POSTGRESQL_BACKUP" "/backup"
 
 bf-env "POSTGRESQL_BACKUP_FILENAME" "dump"
 bf-env "POSTGRESQL_RESTORE_PATH" "${POSTGRESQL_BACKUP}/restore.sql"
