@@ -1,0 +1,80 @@
+#!/usr/bin/with-contenv sh
+
+set -euo pipefail
+export BF_E=`basename ${0}`
+
+
+#======================================================================================================================
+# Start server.
+#======================================================================================================================
+
+start () {
+
+    # initialise data directory
+    bf-debug "Running db-init."
+    s6-setuidgid postgres initdb -D "${POSTGRESQL_DATA}"
+
+    # start server
+    bf-echo "Starting PostgreSQL for initialisation."
+    s6-setuidgid postgres pg_ctl start -D "${POSTGRESQL_DATA}"
+
+}
+
+
+#======================================================================================================================
+# Stop server.
+#======================================================================================================================
+
+stop () {
+    bf-echo "Stopping PostgreSQL."
+    s6-setuidgid postgres pg_ctl stop -D "${POSTGRESQL_DATA}"
+}
+
+
+#======================================================================================================================
+# Check for restore file.
+#======================================================================================================================
+
+if [ -f "${POSTGRESQL_RESTORE}" ] ; then
+
+    # delete existing files
+    bf-debug "Deleting existing files."
+    bf-rmrf "${POSTGRESQL_DATA}/*"
+
+    # run restore
+    start
+    bf-debug "Restoring server."
+    s6-setuidgid postgres psql -f "${POSTGRESQL_RESTORE}"
+    stop
+
+    # delete restore file
+    rm "${POSTGRESQL_RESTORE}"
+
+fi
+
+
+#======================================================================================================================
+# Run library init executable.
+#======================================================================================================================
+
+if [ ! -f ${POSTGRESQL_DATA}/PG_VERSION ] ; then
+
+    # run init
+    start
+    bf-debug "Initialising server."
+    s6-setuidgid postgres ${POSTGRESQL_LIB}/init
+    stop
+
+else
+
+    # be friendly..
+    bf-debug "Server ready."
+
+fi
+
+
+#======================================================================================================================
+# Regenerate configuration.
+#======================================================================================================================
+
+s6-setuidgid postgres ${POSTGRESQL_LIB}/config

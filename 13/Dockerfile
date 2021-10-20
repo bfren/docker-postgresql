@@ -1,0 +1,16 @@
+FROM bfren/alpine-s6:alpine3.14-2.2.19
+
+ENV \
+    # set to "1" to compress backup sql files
+    POSTGRESQL_BACKUP_COMPRESS_FILES="0" \
+    # the number of days after which backups will be deleted
+    POSTGRESQL_BACKUP_KEEP_FOR_DAYS="28"
+
+EXPOSE 5432
+
+COPY ./overlay /
+COPY ./13/POSTGRESQL_BUILD /tmp/VERSION
+
+RUN bf-install
+
+VOLUME [ "/data", "/backup" ]

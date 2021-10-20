@@ -1,0 +1,12 @@
+#!/usr/bin/with-contenv sh
+
+set -euo pipefail
+export BF_E="${PWD##*/}/$(basename ${0})"
+
+
+#======================================================================================================================
+# Run as PostgreSQL user.
+#======================================================================================================================
+
+bf-echo "Starting PostgreSQL server."
+s6-setuidgid postgres postgres -D "${POSTGRESQL_DATA}"

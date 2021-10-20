@@ -1,0 +1,16 @@
+#!/usr/bin/with-contenv sh
+
+set -euo pipefail
+export BF_E=`basename ${0}`
+
+
+#======================================================================================================================
+# Config is re-written every time in case environment variables have been changed.
+#======================================================================================================================
+
+bf-echo "Writing PostgreSQL config..."
+esh -o ${POSTGRESQL_DATA}/pg_hba.conf \
+    ${BF_TEMPLATES}/pg_hba.conf.esh
+esh -o ${POSTGRESQL_DATA}/postgres.conf \
+    ${BF_TEMPLATES}/postgres.conf.esh
+bf-done

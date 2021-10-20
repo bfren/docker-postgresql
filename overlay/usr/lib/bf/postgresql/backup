@@ -1,0 +1,62 @@
+#!/usr/bin/with-contenv sh
+
+set -euo pipefail
+export BF_E=`basename ${0}`
+
+
+#======================================================================================================================
+# Set variables.
+#======================================================================================================================
+
+DATE=$(date '+%Y%m%d%H%M')
+bf-debug "Backup: ${DATE}."
+
+
+#======================================================================================================================
+# Create temporary directory for backups.
+#======================================================================================================================
+
+TEMP_BACKUP_PATH=$(mktemp -d -t backup.XXXXXX) || bf-error "Unable to make temporary backup directory."
+bf-echo "Backing up server to ${TEMP_BACKUP_PATH}..."
+
+
+#======================================================================================================================
+# Dump database cluster and compress.
+#======================================================================================================================
+
+# dump cluster
+DUMP_FILE="${TEMP_BACKUP_PATH}/${POSTGRESQL_BACKUP_FILENAME}.sql"
+bf-debug " .. dumping cluster to ${DUMP_FILE}"
+pg_dumpall > "${DUMP_FILE}"
+
+# compress file
+if [ "${POSTGRESQL_BACKUP_COMPRESS_FILES}" = "1" ] ; then
+    bf-debug " .. compressing cluster backup"
+    gzip ${DUMP_FILE}
+fi
+
+bf-done
+
+
+#======================================================================================================================
+# Move backups to backup directory.
+#======================================================================================================================
+
+BACKUP_PATH=${POSTGRESQL_BACKUP}/${DATE}
+bf-echo "Moving backups to ${BACKUP_PATH}..."
+mv ${TEMP_BACKUP_PATH} ${BACKUP_PATH}
+bf-done
+
+
+#======================================================================================================================
+# Remove old backups.
+#======================================================================================================================
+
+if [ "${POSTGRESQL_BACKUP_KEEP_FOR_DAYS}" -gt 0 ] ; then
+
+    bf-echo "Deleting backups older than ${POSTGRESQL_BACKUP_KEEP_FOR_DAYS} days..."
+    MMIN=$((60*24*${POSTGRESQL_BACKUP_KEEP_FOR_DAYS}))
+    find ${POSTGRESQL_BACKUP}/* -type d -mmin +${MMIN} | xargs rm -rf
+    bf-done
+
+fi

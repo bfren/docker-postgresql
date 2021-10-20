@@ -1,0 +1,19 @@
+#!/usr/bin/with-contenv sh
+
+set -euo pipefail
+export BF_E=`basename ${0}`
+
+
+#======================================================================================================================
+# Add environment variables.
+#======================================================================================================================
+
+# Library configuration
+bf-env "POSTGRESQL_LIB" "${BF_LIB}/postgresql"
+
+POSTGRESQL_BACKUP="/backup"
+bf-env "POSTGRESQL_DATA" "/data"
+bf-env "POSTGRESQL_BACKUP" "${POSTGRESQL_BACKUP}"
+
+bf-env "POSTGRESQL_BACKUP_FILENAME" "dump"
+bf-env "POSTGRESQL_RESTORE" "${POSTGRESQL_BACKUP}/restore.sql"

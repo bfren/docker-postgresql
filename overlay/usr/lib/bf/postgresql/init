@@ -1,0 +1,41 @@
+#!/usr/bin/with-contenv sh
+
+set -euo pipefail
+export BF_E=`basename ${0}`
+
+
+#======================================================================================================================
+# Check for application user and password.
+#======================================================================================================================
+
+[[ -z "${POSTGRESQL_USERNAME-}" || -z "${POSTGRESQL_PASSWORD-}" ]] \
+    && bf-error "POSTGRESQL_USERNAME and POSTGRESQL_PASSWORD must be set."
+
+
+#======================================================================================================================
+# Initialise server, create role and application database(s), enable remote connections.
+#======================================================================================================================
+
+# create specified role
+bf-debug "Creating role ${POSTGRESQL_USERNAME}..."
+psql -c "CREATE ROLE ${POSTGRESQL_USERNAME} WITH SUPERUSER LOGIN ENCRYPTED PASSWORD '${POSTGRESQL_PASSWORD}';"
+
+# create database(s)
+bf-debug "Creating..."
+if [ ! -z "${POSTGRESQL_DATABASE-}" ] ; then
+
+    bf-debug " .. specified database(s):"
+    DATABASES=$(echo ${POSTGRESQL_DATABASE} | tr "," "\n")
+
+    for DATABASE in ${DATABASES} ; do
+        bf-debug " .. ${DATABASE}."
+        createdb "${DATABASE}" -O "${POSTGRESQL_USERNAME}"
+    done
+
+# no database specified so use username as database name
+else
+
+    bf-debug " .. application database: ${POSTGRESQL_USERNAME}."
+    createdb "${POSTGRESQL_USERNAME}" -O "${POSTGRESQL_USERNAME}"
+
+fi
