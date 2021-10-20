@@ -35,5 +35,5 @@ bf-ok " .. found ${DUMP_FILE}."
 # Move dump file to restore location and restart.
 #======================================================================================================================
 
-mv ${DUMP_FILE} ${POSTGRESQL_RESTORE_PATH}
+mv ${DUMP_FILE} ${POSTGRESQL_RESTORE}
 bf-svc-terminate

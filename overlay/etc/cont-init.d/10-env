@@ -15,4 +15,4 @@ bf-env "POSTGRESQL_DATA" "/data"
 bf-env "POSTGRESQL_BACKUP" "/backup"
 
 bf-env "POSTGRESQL_BACKUP_FILENAME" "dump"
-bf-env "POSTGRESQL_RESTORE_PATH" "${POSTGRESQL_BACKUP}/restore.sql"
+bf-env "POSTGRESQL_RESTORE" "${POSTGRESQL_BACKUP}/restore.sql"

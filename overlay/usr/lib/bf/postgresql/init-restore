@@ -17,7 +17,7 @@ bf-echo "Starting PostgreSQL for restore."
 pg_ctl start -D "${POSTGRESQL_DATA}"
 
 # run restore
-psql -f "${POSTGRESQL_RESTORE_PATH}"
+psql -f "${POSTGRESQL_RESTORE}"
 
 # stop server
 pg_ctl stop -D "${POSTGRESQL_DATA}"

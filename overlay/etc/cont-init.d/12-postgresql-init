@@ -8,7 +8,7 @@ export BF_E=`basename ${0}`
 # Check for restore file.
 #======================================================================================================================
 
-if [ -f "${POSTGRESQL_RESTORE_PATH}" ] ; then
+if [ -f "${POSTGRESQL_RESTORE}" ] ; then
 
     # delete existing files
     bf-debug "Deleting existing files."
@@ -18,7 +18,7 @@ if [ -f "${POSTGRESQL_RESTORE_PATH}" ] ; then
     s6-setuidgid postgres ${POSTGRESQL_LIB}/init-restore
 
     # delete restore file
-    rm "${POSTGRESQL_RESTORE_PATH}"
+    rm "${POSTGRESQL_RESTORE}"
 
 fi
 
