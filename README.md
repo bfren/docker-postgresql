@@ -20,7 +20,7 @@
 
 Backups for every database are stored:
 
-* in the `/var/lib/postgresql/backup` volume
+* in the `/backup` volume
 * in subfolders by date and time (yyMMddhhmm)
 * every eight hours
 
