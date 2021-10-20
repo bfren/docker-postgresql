@@ -53,11 +53,6 @@ if [ ! -f ${POSTGRESQL_DATA}/PG_VERSION ] ; then
     # stop server
     pg_ctl stop -D "${POSTGRESQL_DATA}"
 
-    # enable remote connections
-    bf-debug "Enabling remote connections..."
-    echo "host all all 0.0.0.0/0 md5" >> ${POSTGRESQL_DATA}/pg_hba.conf
-    echo "listen_addresses='*'" >> ${POSTGRESQL_DATA}/postgresql.conf
-
 fi
 
 
