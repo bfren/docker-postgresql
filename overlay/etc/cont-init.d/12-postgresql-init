@@ -8,10 +8,10 @@ export BF_E=`basename ${0}`
 # Start server.
 #======================================================================================================================
 
-start-server () {
+start () {
 
     # initialise data directory
-    bf-debug "Running db-init..."
+    bf-debug "Running db-init."
     s6-setuidgid postgres initdb -D "${POSTGRESQL_DATA}"
 
     # start server
@@ -25,7 +25,8 @@ start-server () {
 # Stop server.
 #======================================================================================================================
 
-stop-server () {
+stop () {
+    bf-echo "Stopping PostgreSQL."
     s6-setuidgid postgres pg_ctl stop -D "${POSTGRESQL_DATA}"
 }
 
@@ -41,10 +42,10 @@ if [ -f "${POSTGRESQL_RESTORE}" ] ; then
     bf-rmrf "${POSTGRESQL_DATA}/*"
 
     # run restore
-    start-server
-    bf-debug "Restore server."
+    start
+    bf-debug "Restoring server."
     s6-setuidgid postgres psql -f "${POSTGRESQL_RESTORE}"
-    stop-server
+    stop
 
     # delete restore file
     rm "${POSTGRESQL_RESTORE}"
@@ -59,10 +60,10 @@ fi
 if [ ! -f ${POSTGRESQL_DATA}/PG_VERSION ] ; then
 
     # run init
-    start-server
-    bf-debug "Initialise server."
+    start
+    bf-debug "Initialising server."
     s6-setuidgid postgres ${POSTGRESQL_LIB}/init
-    stop-server
+    stop
 
 else
 
