@@ -5,7 +5,7 @@ export BF_E=`basename ${0}`
 
 
 #======================================================================================================================
-# Initialise server, create role and application database(s), enable remote connections.
+# Initialise server, restore from dump file.
 #======================================================================================================================
 
 # initialise server
