@@ -8,4 +8,5 @@ export BF_E="${PWD##*/}/$(basename ${0})"
 # Run as PostgreSQL user.
 #======================================================================================================================
 
-s6-setuidgid postgres ${POSTGRESQL_LIB}/run
+bf-echo "Starting PostgreSQL server."
+s6-setuidgid postgres postgres -D "${POSTGRESQL_DATA}"

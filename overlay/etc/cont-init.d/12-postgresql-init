@@ -5,6 +5,32 @@ export BF_E=`basename ${0}`
 
 
 #======================================================================================================================
+# Start server.
+#======================================================================================================================
+
+start-server () {
+
+    # initialise data directory
+    bf-debug "Running db-init..."
+    s6-setuidgid postgres initdb -D "${POSTGRESQL_DATA}"
+
+    # start server
+    bf-echo "Starting PostgreSQL for initialisation."
+    s6-setuidgid postgres pg_ctl start -D "${POSTGRESQL_DATA}"
+
+}
+
+
+#======================================================================================================================
+# Stop server.
+#======================================================================================================================
+
+stop-server () {
+    s6-setuidgid postgres pg_ctl stop -D "${POSTGRESQL_DATA}"
+}
+
+
+#======================================================================================================================
 # Check for restore file.
 #======================================================================================================================
 
@@ -15,7 +41,10 @@ if [ -f "${POSTGRESQL_RESTORE}" ] ; then
     bf-rmrf "${POSTGRESQL_DATA}/*"
 
     # run restore
-    s6-setuidgid postgres ${POSTGRESQL_LIB}/init-restore
+    start-server
+    bf-debug "Restore server."
+    s6-setuidgid postgres psql -f "${POSTGRESQL_RESTORE}"
+    stop-server
 
     # delete restore file
     rm "${POSTGRESQL_RESTORE}"
@@ -30,8 +59,10 @@ fi
 if [ ! -f ${POSTGRESQL_DATA}/PG_VERSION ] ; then
 
     # run init
+    start-server
     bf-debug "Initialise server."
     s6-setuidgid postgres ${POSTGRESQL_LIB}/init
+    stop-server
 
 else
 
@@ -39,3 +70,10 @@ else
     bf-debug "Server ready."
 
 fi
+
+
+#======================================================================================================================
+# Regenerate configuration.
+#======================================================================================================================
+
+s6-setuidgid postgres ${POSTGRESQL_LIB}/config
