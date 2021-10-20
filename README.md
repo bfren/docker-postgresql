@@ -46,6 +46,14 @@ See [For Backups](#for-backups) for configuration variables.
 | `POSTGRESQL_BACKUP_COMPRESS_FILES` | 0 or 1                       | Whether or not to compress backup files (using gzip).    | 0       |
 | `POSTGRESQL_BACKUP_KEEP_FOR_DAYS`  | 0: keep forever<br>Num: days | How many days to keep backups before auto-deleting them. | 14      |
 
+### For Database
+
+| Variable                | Values | Description                                                                                           | Default           |
+| ----------------------- | ------ | ----------------------------------------------------------------------------------------------------- | ----------------- |
+| `POSTGRESQL_USERNAME`   | string | Application username - will be used as database name if `POSTGRESQL_DATABASE` is not set.             | *None* - required |
+| `POSTGRESQL_PASSWORD`   | string | Application password.                                                                                 | *None* - required |
+| `POSTGRESQL_DATABASE`   | string | Database name(s) - multiple databases can be separated by a comma.                                    | *None*            |
+
 ## Helper Functions
 
 | Function     | Purpose                                                                                                                            | Usage                                               |
