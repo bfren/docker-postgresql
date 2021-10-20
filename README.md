@@ -32,10 +32,10 @@ See [For Backups](#for-backups) for configuration variables.
 
 ## Volumes
 
-| Volume                       | Purpose                                                                                           |
-| ---------------------------- | ------------------------------------------------------------------------------------------------- |
-| `/var/lib/postgresql/data`   | Data files.                                                                                       |
-| `/var/lib/postgresql/backup` | Backup files (also used for export / import scripts - see [helper functions](#helper-functions)). |
+| Volume    | Purpose                                                                                           |
+| --------- | ------------------------------------------------------------------------------------------------- |
+| `/data`   | Data files.                                                                                       |
+| `/backup` | Backup files (also used for export / import scripts - see [helper functions](#helper-functions)). |
 
 ## Environment Variables
 
@@ -48,11 +48,14 @@ See [For Backups](#for-backups) for configuration variables.
 
 ## Helper Functions
 
-| Function    | Purpose                                                                                 | Usage                                             |
-| ----------- | --------------------------------------------------------------------------------------- | ------------------------------------------------- |
-| `db-backup` | Run backup manually.                                                                    | `docker exec <<CONTAINER>> db-backup`             |
-| `db-export` | Dumps the specified database as a SQL file to the root of the `/var/lib/backup` volume. | `docker exec <<CONTAINER>> db-export <<DB_NAME>>` |
-| `db-import` | Executes all files in the root of the `/var/lib/backup` volume.                         | `docker exec <<CONTAINER>> db-import`             |
+| Function     | Purpose                                                                                                                            | Usage                                               |
+| ------------ | ---------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------- |
+| `db-backup`  | Run backup manually.                                                                                                               | `docker exec <<CONTAINER>> db-backup`               |
+| `db-exists`  | Echoes '0' or '1' depending on whether or not the specified database exists on the server.                                         | `docker exec <<CONTAINER>> db-exists "foo"`         |
+| `db-export`  | Dumps the specified database as a SQL file to the root of the `/backup` volume.                                                    | `docker exec <<CONTAINER>> db-export <<DB_NAME>>`   |
+| `db-import`  | Executes all files in the root of the `/backup` volume.                                                                            | `docker exec <<CONTAINER>> db-import`               |
+| `db-restore` | Deletes all files in `/data` volume, then shuts container down - on restart, the container will restore from the specified backup. | `docker exec <<CONTAINER>> db-restore 202107180500` |
+| `db-stop`    | Stops the database server (will automatically terminate the container).                                                            | `docker exec <<CONTAINER>> db-stop`                 |
 
 ## Licence
 
