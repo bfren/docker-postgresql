@@ -18,7 +18,7 @@ export BF_E=`basename ${0}`
 
 # create specified role
 bf-debug "Creating role ${POSTGRESQL_USERNAME}..."
-echo -e "${POSTGRESQL_PASSWORD}\n${POSTGRESQL_PASSWORD}" | createuser ${POSTGRESQL_USERNAME} --superuser --pwprompt
+echo -e "${POSTGRESQL_PASSWORD}\n${POSTGRESQL_PASSWORD}" | createuser --superuser --pwprompt ${POSTGRESQL_USERNAME}
 
 # create database(s)
 bf-debug "Creating..."
