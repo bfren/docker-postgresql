@@ -1,11 +1,11 @@
 # Docker PostgreSQL
 
 ![GitHub release (latest by date)](https://img.shields.io/github/v/release/bfren/docker-postgresql) ![Docker Pulls](https://img.shields.io/docker/pulls/bfren/postgresql?label=pulls) ![Docker Image Size (tag)](https://img.shields.io/docker/image-size/bfren/postgresql/latest?label=size)<br/>
-![GitHub Workflow Status](https://img.shields.io/github/workflow/status/bfren/docker-postgresql/dev?label=build)
+![GitHub Workflow Status](https://img.shields.io/github/workflow/status/bfren/docker-postgresql/dev-13?label=build)
 
 [Docker Repository](https://hub.docker.com/r/bfren/postgresql) - [bfren ecosystem](https://github.com/bfren/docker)
 
-[PostgreSQL](https://www.postgresql.org/) comes pre-installed (12, 12, or 14) with automatic backups built-in.
+[PostgreSQL](https://www.postgresql.org/) comes pre-installed (12, 13, or 14) with automatic backups built-in.
 
 ## Contents
 
@@ -20,7 +20,7 @@
 
 Backups for every database are stored:
 
-* in the `/var/lib/postgresql/backup` volume
+* in the `/backup` volume
 * in subfolders by date and time (yyMMddhhmm)
 * every eight hours
 

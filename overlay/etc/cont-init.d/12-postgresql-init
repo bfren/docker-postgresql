@@ -14,6 +14,10 @@ start () {
     bf-debug "Running db-init."
     s6-setuidgid postgres initdb -D "${POSTGRESQL_DATA}"
 
+    # regenerate configuration
+    bf-debug "Regenerating configuration files."
+    s6-setuidgid postgres ${POSTGRESQL_LIB}/config
+
     # start server
     bf-echo "Starting PostgreSQL for initialisation."
     s6-setuidgid postgres pg_ctl start -D "${POSTGRESQL_DATA}"
@@ -65,16 +69,11 @@ if [ ! -f ${POSTGRESQL_DATA}/PG_VERSION ] ; then
     s6-setuidgid postgres ${POSTGRESQL_LIB}/init
     stop
 
-else
-
-    # be friendly..
-    bf-debug "Server ready."
-
 fi
 
 
 #======================================================================================================================
-# Regenerate configuration.
+# Be friendly.
 #======================================================================================================================
 
-s6-setuidgid postgres ${POSTGRESQL_LIB}/config
+bf-debug "Server ready."
