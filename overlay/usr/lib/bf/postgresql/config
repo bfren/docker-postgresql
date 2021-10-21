@@ -11,6 +11,6 @@ export BF_E=`basename ${0}`
 bf-echo "Writing PostgreSQL config..."
 esh -o ${POSTGRESQL_DATA}/pg_hba.conf \
     ${BF_TEMPLATES}/pg_hba.conf.esh
-esh -o ${POSTGRESQL_DATA}/postgres.conf \
-    ${BF_TEMPLATES}/postgres.conf.esh
+esh -o ${POSTGRESQL_DATA}/postgresql.conf \
+    ${BF_TEMPLATES}/postgresql.conf.esh
 bf-done
