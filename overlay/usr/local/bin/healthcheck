@@ -11,10 +11,7 @@ export BF_E=`basename ${0}`
 # Modifications copyright (c) 2021 bfren
 #======================================================================================================================
 
-USERNAME=${POSTGRESQL_USERNAME:-root}
-PASSWORD=${POSTGRESQL_PASSWORD:-${POSTGRESQL_ROOT_PASSWORD}}
-
-CHECK="$(echo 'SELECT 1;' | mariadb -h127.0.0.1 -u${USERNAME} -p${PASSWORD} 2>/dev/null | head -n1)"
+CHECK=$(psql -U postgres -c "SELECT 1;" 2>/dev/null | tail -n3 | head -n1)
 
 [[ "${CHECK}" == "1" ]] && exit 0
 exit 1
