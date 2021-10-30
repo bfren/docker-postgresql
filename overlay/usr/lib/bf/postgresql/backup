@@ -26,7 +26,7 @@ bf-echo "Backing up server to ${TEMP_BACKUP_PATH}..."
 
 # dump cluster
 DUMP_FILE="${TEMP_BACKUP_PATH}/${POSTGRESQL_BACKUP_FILENAME}.sql"
-bf-debug " .. dumping cluster to ${DUMP_FILE}"
+bf-debug " .. dumping cluster"
 pg_dumpall > "${DUMP_FILE}"
 
 # compress file
@@ -41,7 +41,9 @@ fi
 #======================================================================================================================
 
 # remove header / footer from output
-DATABASES=$(psql -c "SELECT datname FROM pg_database;" | tail -n+3 | head -n-2)
+EXCLUDE="postgres|template0|template1"
+bf-debug " .. excluding ${EXCLUDE} from individual backups"
+DATABASES=$(psql -c "SELECT datname FROM pg_database;" | tail -n+3 | head -n-2 | grep -v -E "(${EXCLUDE})")
 
 # dump each database
 for DATABASE in ${DATABASES} ; do
@@ -50,7 +52,7 @@ for DATABASE in ${DATABASES} ; do
     DUMP_FILE="${TEMP_BACKUP_PATH}/${DATABASE}.sql"
 
     # dump database and continue on failure
-    bf-debug " .. dumping ${DATABASE} to ${DUMP_FILE}"
+    bf-debug " .. dumping database '${DATABASE}'"
     pg_dump ${DATABASE} > ${DUMP_FILE}|| true
 
     # compress file
