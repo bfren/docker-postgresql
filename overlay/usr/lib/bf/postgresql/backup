@@ -52,16 +52,18 @@ for DATABASE in ${DATABASES} ; do
     DUMP_FILE="${TEMP_BACKUP_PATH}/${DATABASE}.sql"
 
     # dump database and continue on failure
-    bf-debug " .. dumping database '${DATABASE}'"
+    bf-debug " .. dumping database ${DATABASE}"
     pg_dump ${DATABASE} > ${DUMP_FILE}|| true
 
     # compress file
-    [[ "${POSTGRESQL_BACKUP_COMPRESS_FILES}" = "1" ]] && gzip ${DUMP_FILE}
+    if [ "${POSTGRESQL_BACKUP_COMPRESS_FILES}" = "1" ] ; then
+        bf-debug " .. compressing"
+        gzip ${DUMP_FILE}
+    fi
 
 done
+
 bf-done
-
-
 
 
 #======================================================================================================================
