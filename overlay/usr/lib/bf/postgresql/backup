@@ -31,7 +31,7 @@ pg_dumpall > "${DUMP_FILE}"
 
 # compress file
 if [ "${POSTGRESQL_BACKUP_COMPRESS_FILES}" = "1" ] ; then
-    bf-debug " .. compressing cluster backup"
+    bf-debug " .. compressing"
     gzip ${DUMP_FILE}
 fi
 
