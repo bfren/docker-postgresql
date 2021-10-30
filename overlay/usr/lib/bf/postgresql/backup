@@ -35,7 +35,31 @@ if [ "${POSTGRESQL_BACKUP_COMPRESS_FILES}" = "1" ] ; then
     gzip ${DUMP_FILE}
 fi
 
+
+#======================================================================================================================
+# Get list of individual databases, dump and compress.
+#======================================================================================================================
+
+# remove header / footer from output
+DATABASES=$(psql -c "SELECT datname FROM pg_database;" | tail -n+3 | head -n-2)
+
+# dump each database
+for DATABASE in ${DATABASES} ; do
+
+    # path to this database dump
+    DUMP_FILE="${TEMP_BACKUP_PATH}/${DATABASE}.sql"
+
+    # dump database and continue on failure
+    bf-debug " .. dumping ${DATABASE} to ${DUMP_FILE}"
+    pg_dump ${DATABASE} > ${DUMP_FILE}|| true
+
+    # compress file
+    [[ "${POSTGRESQL_BACKUP_COMPRESS_FILES}" = "1" ]] && gzip ${DUMP_FILE}
+
+done
 bf-done
+
+
 
 
 #======================================================================================================================
