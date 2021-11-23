@@ -71,4 +71,4 @@ See [For Backups](#for-backups) for configuration variables.
 
 ## Copyright
 
-> Copyright (c) 2021 bfren
+> Copyright (c) 2021 [bfren](https://bfren.dev) (unless otherwise stated)
