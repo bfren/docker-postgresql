@@ -48,11 +48,11 @@ See [For Backups](#for-backups) for configuration variables.
 
 ### For Database
 
-| Variable                | Values | Description                                                                                           | Default           |
-| ----------------------- | ------ | ----------------------------------------------------------------------------------------------------- | ----------------- |
-| `POSTGRESQL_USERNAME`   | string | Application username - will be used as database name if `POSTGRESQL_DATABASE` is not set.             | *None* - required |
-| `POSTGRESQL_PASSWORD`   | string | Application password.                                                                                 | *None* - required |
-| `POSTGRESQL_DATABASE`   | string | Database name(s) - multiple databases can be separated by a comma.                                    | *None*            |
+| Variable              | Values | Description                                                                               | Default           |
+| --------------------- | ------ | ----------------------------------------------------------------------------------------- | ----------------- |
+| `POSTGRESQL_USERNAME` | string | Application username - will be used as database name if `POSTGRESQL_DATABASE` is not set. | *None* - required |
+| `POSTGRESQL_PASSWORD` | string | Application password.                                                                     | *None* - required |
+| `POSTGRESQL_DATABASE` | string | Database name(s) - multiple databases can be separated by a comma.                        | *None*            |
 
 ## Helper Functions
 
