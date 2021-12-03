@@ -1,4 +1,7 @@
-FROM bfren/alpine-s6:alpine3.15-3.0.2
+FROM bfren/alpine-s6:alpine3.15-3.1.1
+
+ARG BF_IMAGE
+ARG BF_VERSION
 
 ENV \
     # set to "1" to compress backup sql files

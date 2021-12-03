@@ -36,6 +36,24 @@ stop () {
 
 
 #======================================================================================================================
+# Check data version against server version.
+#======================================================================================================================
+
+[[ -f "/data/PG_VERSION" ]] && POSTGRESQL_DATA_VERSION=`cat /data/PG_VERSION`
+POSTGRESQL_SERVER_VERSION=`cat /usr/libexec/postgresql/PG_VERSION`
+
+if [[ -z "${POSTGRESQL_DATA_VERSION-}" ]] || [[ "${POSTGRESQL_DATA_VERSION}" = "${POSTGRESQL_SERVER_VERSION}" ]] ; then
+    bf-debug "Versions ok."
+else
+    bf-notok "PostgreSQL server (v${POSTGRESQL_SERVER_VERSION}) does not match data (v${POSTGRESQL_DATA_VERSION})."
+    bf-notok "You must upgrade the data or use a version of this image that matches the data version."
+    bf-notok "Container will now quit."
+    s6-svscanctl -t ${S6_SERVICES}
+    exit 1
+fi
+
+
+#======================================================================================================================
 # Check for restore file.
 #======================================================================================================================
 
