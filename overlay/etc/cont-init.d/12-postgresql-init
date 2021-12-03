@@ -45,9 +45,9 @@ POSTGRESQL_SERVER_VERSION=`cat /usr/libexec/postgresql/PG_VERSION`
 if [[ -z "${POSTGRESQL_DATA_VERSION-}" ]] || [[ "${POSTGRESQL_DATA_VERSION}" = "${POSTGRESQL_SERVER_VERSION}" ]] ; then
     bf-debug "Versions ok."
 else
-    MSG="PostgreSQL server (v${POSTGRESQL_SERVER_VERSION}) does not match data (v${POSTGRESQL_DATA_VERSION})."
-    MSG="${MSG}\nYou must upgrade the data or use a version of this image that matches the data version."
-    bf-notok "${MSG}"
+    bf-notok "PostgreSQL server (v${POSTGRESQL_SERVER_VERSION}) does not match data (v${POSTGRESQL_DATA_VERSION})."
+    bf-notok "You must upgrade the data or use a version of this image that matches the data version."
+    bf-notok "Container will now quit."
     s6-svscanctl -t ${S6_SERVICES}
     exit 1
 fi
