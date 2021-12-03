@@ -47,7 +47,9 @@ if [[ -z "${POSTGRESQL_DATA_VERSION-}" ]] || [[ "${POSTGRESQL_DATA_VERSION}" = "
 else
     MSG="PostgreSQL server (v${POSTGRESQL_SERVER_VERSION}) does not match data (v${POSTGRESQL_DATA_VERSION}). "
     MSG+="You must us db-upgrade or choose an image that matches the data version."
-    bf-error ${MSG}
+    bf-notok ${MSG}
+    s6-svscanctl -t ${S6_SERVICES}
+    exit 1
 fi
 
 
