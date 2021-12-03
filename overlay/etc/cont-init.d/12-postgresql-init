@@ -39,6 +39,9 @@ stop () {
 # Check data version against server version.
 #======================================================================================================================
 
+[[ -f "/data/PG_VERSION" ]] && POSTGRESQL_DATA_VERSION=`cat /data/PG_VERSION`
+POSTGRESQL_SERVER_VERSION=`cat /usr/libexec/postgresql/PG_VERSION`
+
 if [[ -z "${POSTGRESQL_DATA_VERSION-}" ]] || [[ "${POSTGRESQL_DATA_VERSION}" = "${POSTGRESQL_SERVER_VERSION}" ]] ; then
     bf-debug "Versions ok."
 else
