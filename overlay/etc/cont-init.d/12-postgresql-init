@@ -15,8 +15,7 @@ start () {
     s6-setuidgid postgres initdb -D "${POSTGRESQL_DATA}"
 
     # regenerate configuration
-    bf-debug "Regenerating configuration files."
-    s6-setuidgid postgres ${POSTGRESQL_LIB}/config
+    db-regenerate-config
 
     # start server
     bf-echo "Starting PostgreSQL for initialisation."
