@@ -1,0 +1,11 @@
+#!/usr/bin/with-contenv sh
+
+set -euo pipefail
+
+
+#======================================================================================================================
+# Run library config executable.
+#======================================================================================================================
+
+bf-debug "Regenerating configuration files." "db-regenerate-config"
+s6-setuidgid postgres ${POSTGRESQL_LIB}/config
