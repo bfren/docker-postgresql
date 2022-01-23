@@ -4,7 +4,7 @@ set -euo pipefail
 
 docker pull bfren/alpine
 
-BASE_REVISION="3.2.2"
+BASE_REVISION="3.2.3"
 echo "Base: ${BASE_REVISION}"
 
 POSTGRESQL_VERSIONS="12 13 14"
@@ -24,4 +24,5 @@ for V in ${POSTGRESQL_VERSIONS} ; do
 
 done
 
+docker system prune -f
 echo "Done."
