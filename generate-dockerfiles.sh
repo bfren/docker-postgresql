@@ -4,7 +4,7 @@ set -euo pipefail
 
 docker pull bfren/alpine
 
-BASE_REVISION="3.2.3"
+BASE_REVISION="4.0.1"
 echo "Base: ${BASE_REVISION}"
 
 POSTGRESQL_VERSIONS="12 13 14"
@@ -14,6 +14,7 @@ for V in ${POSTGRESQL_VERSIONS} ; do
 
     DOCKERFILE=$(docker run \
         -v ${PWD}:/ws \
+        -e BF_DEBUG=0 \
         bfren/alpine esh \
         "/ws/Dockerfile.esh" \
         BASE_REVISION=${BASE_REVISION} \
