@@ -1,11 +1,11 @@
-#!/usr/bin/with-contenv sh
+#!/command/with-contenv sh
 
 set -euo pipefail
+export BF_E=`basename ${0}`
 
 
 #======================================================================================================================
-# Run library config executable.
+# Run library backup executable.
 #======================================================================================================================
 
-bf-debug "Regenerating configuration files." "db-regenerate-config"
-s6-setuidgid postgres ${POSTGRESQL_LIB}/config
+s6-setuidgid postgres ${POSTGRESQL_LIB}/backup
