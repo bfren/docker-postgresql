@@ -1,6 +1,7 @@
-#!/usr/bin/with-contenv sh
+#!/command/with-contenv sh
 
 set -euo pipefail
+export BF_E="${PWD##*/}/$(basename ${0})"
 
 
 #======================================================================================================================
@@ -8,4 +9,4 @@ set -euo pipefail
 #======================================================================================================================
 
 s6-setuidgid postgres ${POSTGRESQL_LIB}/finish
-bf-svc-finish -s ${PWD##*/} -t
+bf-svc-finish -t
