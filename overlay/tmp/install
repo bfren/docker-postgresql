@@ -17,8 +17,8 @@ bf-adduser postgres
 
 cd /tmp
 
-VERSION=$(cat VERSION)
-bf-debug "PostgreSQL version ${VERSION}."
+VERSION=$(cat POSTGRESQL_BUILD)
+bf-echo "PostgreSQL version ${VERSION}."
 
 
 #======================================================================================================================
@@ -38,7 +38,7 @@ bf-done
 # Create PostgreSQL directories.
 #======================================================================================================================
 
-bf-debug "Creating PostgreSQL directories."
+bf-echo "Creating PostgreSQL directories."
 
 mkdir /data
 mkdir /backup
@@ -49,5 +49,5 @@ mkdir /run/postgresql
 # Add backup executable to main cron.
 #======================================================================================================================
 
-bf-debug "Adding db-backup to cron."
-echo "0 */8 * * * /usr/local/bin/db-backup" >> /etc/crontabs/root
+bf-echo "Adding db-backup to cron."
+echo "0 */8 * * * /usr/bin/bf/db-backup" >> /etc/crontabs/root

@@ -1,14 +1,11 @@
-#!/usr/bin/with-contenv sh
+#!/command/with-contenv sh
 
 set -euo pipefail
 export BF_E=`basename ${0}`
 
 
 #======================================================================================================================
-# Perform a basic sql command to check the server is running.
+# Run library import executable.
 #======================================================================================================================
 
-CHECK=$(psql -U postgres -c "SELECT 1;" 2>/dev/null | tail -n3 | head -n1 | xargs)
-
-[[ "${CHECK}" == "1" ]] && exit 0
-exit 1
+s6-setuidgid postgres ${POSTGRESQL_LIB}/import

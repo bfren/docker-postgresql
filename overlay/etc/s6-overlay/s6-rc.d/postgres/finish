@@ -1,11 +1,12 @@
-#!/usr/bin/with-contenv sh
+#!/command/with-contenv sh
 
 set -euo pipefail
-export BF_E=`basename ${0}`
+export BF_E="${PWD##*/}/$(basename ${0})"
 
 
 #======================================================================================================================
-# Run library import executable.
+# Show helpful log message.
 #======================================================================================================================
 
-s6-setuidgid postgres ${POSTGRESQL_LIB}/import
+s6-setuidgid postgres ${POSTGRESQL_LIB}/finish
+bf-svc-finish -t
