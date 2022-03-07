@@ -1,4 +1,4 @@
-FROM bfren/alpine-s6:alpine3.15-4.1.0
+FROM bfren/alpine-s6:alpine3.15-4.1.1
 
 ARG BF_IMAGE
 ARG BF_VERSION
@@ -12,7 +12,7 @@ ENV \
 EXPOSE 5432
 
 COPY ./overlay /
-COPY ./14/POSTGRESQL_BUILD /tmp/
+COPY ./14/overlay /
 
 RUN bf-install
 

@@ -12,7 +12,7 @@ ENV \
 EXPOSE 5432
 
 COPY ./overlay /
-COPY ./<%= ${POSTGRESQL_MINOR} %>/POSTGRESQL_BUILD /tmp/
+COPY ./<%= ${POSTGRESQL_MINOR} %>/overlay /
 
 RUN bf-install
 
