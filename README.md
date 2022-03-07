@@ -28,7 +28,7 @@ See [For Backups](#for-backups) for configuration variables.
 
 ## Ports
 
-* 3306
+* 5432
 
 ## Volumes
 
