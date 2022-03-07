@@ -19,4 +19,8 @@ bf-env "POSTGRESQL_BACKUP_FILENAME" "dump"
 bf-env "POSTGRESQL_RESTORE" "${POSTGRESQL_BACKUP}/restore.sql"
 
 bf-env "POSTGRESQL_SERVER_VERSION" `cat /usr/libexec/postgresql/PG_VERSION`
-[[ -f "/data/PG_VERSION" ]] && bf-env "POSTGRESQL_DATA_VERSION" `cat /data/PG_VERSION`
+
+PG_VERSION="/data/PG_VERSION"
+if [ -f "${PG_VERSION}" ]; then
+    bf-env "POSTGRESQL_DATA_VERSION" `cat ${PG_VERSION}`
+fi
