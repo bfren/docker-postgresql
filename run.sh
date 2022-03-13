@@ -10,4 +10,4 @@ docker buildx build \
     -t postgresql${POSTGRESQL}-dev \
     . \
     && \
-    docker run -it postgresql${POSTGRESQL}-dev sh
+    docker run -it -e POSTGRESQL_USERNAME=test -e POSTGRESQL_PASSWORD=test postgresql${POSTGRESQL}-dev sh

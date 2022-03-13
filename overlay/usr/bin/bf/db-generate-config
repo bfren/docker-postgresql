@@ -7,5 +7,5 @@ set -euo pipefail
 # Run library config executable.
 #======================================================================================================================
 
-bf-debug "Regenerating configuration files." "db-regenerate-config"
-s6-setuidgid postgres ${POSTGRESQL_LIB}/config
+bf-debug "Generating configuration files." "db-generate-config"
+s6-setuidgid postgres ${POSTGRESQL_LIB}/generate-config
