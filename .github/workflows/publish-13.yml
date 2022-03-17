@@ -20,7 +20,7 @@ jobs:
         name: Read PostgreSQL version - minor
         uses: bfren/read-file@v1
         with:
-          file: ./13/POSTGRESQL_MINOR
+          file: ./13/overlay/tmp/POSTGRESQL_MINOR
         id: postgresql_minor
       -
         name: Read image version
