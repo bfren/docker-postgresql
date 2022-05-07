@@ -36,4 +36,4 @@ bf-ok " .. found ${DUMP_FILE}."
 #======================================================================================================================
 
 mv ${DUMP_FILE} ${POSTGRESQL_RESTORE}
-bf-svc-terminate
+bf-cont-terminate
