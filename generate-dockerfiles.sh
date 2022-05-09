@@ -18,7 +18,7 @@ for V in ${POSTGRESQL_VERSIONS} ; do
         bfren/alpine esh \
         "/ws/Dockerfile.esh" \
         BASE_REVISION=${BASE_REVISION} \
-        POSTGRESQL_MINOR=${V}
+        POSTGRESQL_MAJOR=${V}
     )
 
     echo "${DOCKERFILE}" > ./${V}/Dockerfile
