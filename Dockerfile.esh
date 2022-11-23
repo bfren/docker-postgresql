@@ -1,4 +1,4 @@
-FROM bfren/alpine-s6:alpine3.16-<%= ${BASE_REVISION} %>
+FROM bfren/alpine-s6:alpine3.17-<%= ${BASE_REVISION} %>
 
 LABEL org.opencontainers.image.source="https://github.com/bfren/docker-postgresql"
 

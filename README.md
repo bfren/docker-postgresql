@@ -1,11 +1,11 @@
 # Docker PostgreSQL
 
 ![GitHub release (latest by date)](https://img.shields.io/github/v/release/bfren/docker-postgresql) ![Docker Pulls](https://img.shields.io/endpoint?url=https%3A%2F%2Fbfren.dev%2Fdocker%2Fpulls%2Fpostgresql) ![Docker Image Size](https://img.shields.io/endpoint?url=https%3A%2F%2Fbfren.dev%2Fdocker%2Fsize%2Fpostgresql)<br/>
-![GitHub Workflow Status](https://img.shields.io/github/workflow/status/bfren/docker-postgresql/dev-12?label=PostgreSQL+12) ![GitHub Workflow Status](https://img.shields.io/github/workflow/status/bfren/docker-postgresql/dev-13?label=PostgreSQL+13) ![GitHub Workflow Status](https://img.shields.io/github/workflow/status/bfren/docker-postgresql/dev-14?label=PostgreSQL+14)
+![GitHub Workflow Status](https://img.shields.io/github/workflow/status/bfren/docker-postgresql/dev-12?label=PostgreSQL+12) ![GitHub Workflow Status](https://img.shields.io/github/workflow/status/bfren/docker-postgresql/dev-13?label=PostgreSQL+13) ![GitHub Workflow Status](https://img.shields.io/github/workflow/status/bfren/docker-postgresql/dev-14?label=PostgreSQL+14) ![GitHub Workflow Status](https://img.shields.io/github/workflow/status/bfren/docker-postgresql/dev-15?label=PostgreSQL+15)
 
 [Docker Repository](https://hub.docker.com/r/bfren/postgresql) - [bfren ecosystem](https://github.com/bfren/docker)
 
-[PostgreSQL](https://www.postgresql.org/) comes pre-installed (12, 13, or 14) with automatic backups built-in.
+[PostgreSQL](https://www.postgresql.org/) comes pre-installed (12, 13, 14 or 15) with automatic backups built-in.
 
 ## Contents
 
