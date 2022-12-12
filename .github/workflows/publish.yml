@@ -1,4 +1,4 @@
-name: publish-13
+name: publish
 
 on:
   release:
@@ -6,7 +6,10 @@ on:
   workflow_dispatch:
 
 jobs:
-  publish-13:
+  publish:
+    strategy:
+      matrix:
+        postgresql: [ "12", "13", "14", "15" ]
     runs-on: ubuntu-latest
     steps:
       -
@@ -20,7 +23,7 @@ jobs:
         name: Read PostgreSQL version - minor
         uses: bfren/read-file@v2
         with:
-          file: ./13/overlay/tmp/POSTGRESQL_MINOR
+          file: ./${{ matrix.postgresql }}/overlay/tmp/POSTGRESQL_MINOR
         id: postgresql_minor
       -
         name: Read image version
@@ -65,23 +68,23 @@ jobs:
         uses: docker/build-push-action@v3
         with:
           context: .
-          file: ./13/Dockerfile
+          file: ./${{ matrix.postgresql }}/Dockerfile
           build-args: |
             BF_IMAGE=${{ env.REPOSITORY_NAME }}
             BF_VERSION=${{ steps.version.outputs.contents }}
           push: true
           platforms: linux/amd64,linux/arm/v7,linux/arm64
           tags: |
-            bfren/postgresql:postgresql13
-            bfren/postgresql:postgresql13-${{ steps.version_major.outputs.contents }}
-            bfren/postgresql:postgresql13-${{ steps.version_minor.outputs.contents }}
-            bfren/postgresql:postgresql13-${{ steps.version.outputs.contents }}
+            bfren/postgresql:postgresql${{ matrix.postgresql }}
+            bfren/postgresql:postgresql${{ matrix.postgresql }}-${{ steps.version_major.outputs.contents }}
+            bfren/postgresql:postgresql${{ matrix.postgresql }}-${{ steps.version_minor.outputs.contents }}
+            bfren/postgresql:postgresql${{ matrix.postgresql }}-${{ steps.version.outputs.contents }}
             bfren/postgresql:postgresql${{ steps.postgresql_minor.outputs.contents }}
             bfren/postgresql:postgresql${{ steps.postgresql_minor.outputs.contents }}-${{ steps.version.outputs.contents }}
-            ghcr.io/bfren/postgresql:postgresql13
-            ghcr.io/bfren/postgresql:postgresql13-${{ steps.version_major.outputs.contents }}
-            ghcr.io/bfren/postgresql:postgresql13-${{ steps.version_minor.outputs.contents }}
-            ghcr.io/bfren/postgresql:postgresql13-${{ steps.version.outputs.contents }}
+            ghcr.io/bfren/postgresql:postgresql${{ matrix.postgresql }}
+            ghcr.io/bfren/postgresql:postgresql${{ matrix.postgresql }}-${{ steps.version_major.outputs.contents }}
+            ghcr.io/bfren/postgresql:postgresql${{ matrix.postgresql }}-${{ steps.version_minor.outputs.contents }}
+            ghcr.io/bfren/postgresql:postgresql${{ matrix.postgresql }}-${{ steps.version.outputs.contents }}
             ghcr.io/bfren/postgresql:postgresql${{ steps.postgresql_minor.outputs.contents }}
             ghcr.io/bfren/postgresql:postgresql${{ steps.postgresql_minor.outputs.contents }}-${{ steps.version.outputs.contents }}
       -
