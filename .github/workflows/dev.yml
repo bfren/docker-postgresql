@@ -1,4 +1,4 @@
-name: dev-12
+name: dev
 
 on:
   push:
@@ -7,13 +7,16 @@ on:
   workflow_dispatch:
 
 jobs:
-  test-12:
+  test:
     runs-on: ubuntu-latest
     steps:
       -
         name: Checkout code
         uses: actions/checkout@v3
-  build-12:
+  build:
+    strategy:
+      matrix:
+        postgresql: [ "12", "13", "14", "15" ]
     runs-on: ubuntu-latest
     steps:
       -
@@ -54,17 +57,17 @@ jobs:
         uses: docker/build-push-action@v3
         with:
           context: .
-          file: ./12/Dockerfile
+          file: ./${{ matrix.postgresql }}/Dockerfile
           build-args: |
             BF_IMAGE=${{ env.REPOSITORY_NAME }}
             BF_VERSION=${{ steps.version.outputs.contents }}
           push: ${{ startsWith(github.ref, 'refs/heads/') }}
           platforms: linux/amd64,linux/arm/v7,linux/arm64
           tags: |
-            bfren/postgresql:postgresql12-dev
-            bfren/postgresql:postgresql12-${{ steps.version.outputs.contents }}-beta
-            ghcr.io/bfren/postgresql:postgresql12-dev
-            ghcr.io/bfren/postgresql:postgresql12-${{ steps.version.outputs.contents }}-beta
+            bfren/postgresql:postgresql${{ matrix.postgresql }}-dev
+            bfren/postgresql:postgresql${{ matrix.postgresql }}-${{ steps.version.outputs.contents }}-beta
+            ghcr.io/bfren/postgresql:postgresql${{ matrix.postgresql }}-dev
+            ghcr.io/bfren/postgresql:postgresql${{ matrix.postgresql }}-${{ steps.version.outputs.contents }}-beta
       -
         name: Image digest
         run: echo ${{ steps.docker_build.outputs.digest }}
