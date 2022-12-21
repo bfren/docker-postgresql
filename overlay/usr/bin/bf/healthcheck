@@ -8,7 +8,7 @@ export BF_E=`basename ${0}`
 # Perform a basic sql command to check the server is running.
 #======================================================================================================================
 
-CHECK=$(psql -U postgres -c "SELECT 1;" 2>/dev/null | tail -n3 | head -n1 | xargs)
+CHECK=$(psql -U postgres -c "SELECT 1;" 2> /dev/null | tail -n3 | head -n1 | xargs || echo "0")
 
 [[ "${CHECK}" == "1" ]] && exit 0
 exit 1
