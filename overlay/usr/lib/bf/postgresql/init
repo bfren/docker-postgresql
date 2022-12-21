@@ -28,13 +28,13 @@ if [ ! -z "${POSTGRESQL_DATABASE-}" ] ; then
 
     for DATABASE in ${DATABASES} ; do
         bf-debug " .. ${DATABASE}."
-        createdb "${DATABASE}" -O "${POSTGRESQL_USERNAME}"
+        createdb "${DATABASE}" --owner="${POSTGRESQL_USERNAME}"
     done
 
 # no database specified so use username as database name
 else
 
     bf-debug " .. application database: ${POSTGRESQL_USERNAME}."
-    createdb "${POSTGRESQL_USERNAME}" -O "${POSTGRESQL_USERNAME}"
+    createdb "${POSTGRESQL_USERNAME}" --owner="${POSTGRESQL_USERNAME}"
 
 fi

@@ -18,7 +18,7 @@ for FILE in ${POSTGRESQL_BACKUP}/*.sql ; do
     EXISTS=$(db-exists "${DATABASE}")
     if [ "${EXISTS}" = "0" ] ; then
         bf-echo " .. creating '${DATABASE}'."
-        createdb "${DATABASE}" -O "${POSTGRESQL_USERNAME}"\
+        createdb "${DATABASE}" --owner="${POSTGRESQL_USERNAME}"\
             || bf-notok "  . something went wrong."
     fi
 
