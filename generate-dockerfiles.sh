@@ -4,7 +4,7 @@ set -euo pipefail
 
 docker pull bfren/alpine
 
-BASE_REVISION="4.4.5"
+BASE_REVISION="4.4.6"
 echo "Base: ${BASE_REVISION}"
 
 POSTGRESQL_VERSIONS="12 13 14 15"

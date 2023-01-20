@@ -8,6 +8,7 @@ on:
 jobs:
   publish:
     strategy:
+      fail-fast: false
       matrix:
         postgresql: [ "12", "13", "14", "15" ]
     runs-on: ubuntu-latest
