@@ -67,8 +67,6 @@ jobs:
           tags: |
             bfren/postgresql:postgresql${{ matrix.postgresql }}-dev
             bfren/postgresql:postgresql${{ matrix.postgresql }}-${{ steps.version.outputs.contents }}-beta
-            ghcr.io/bfren/postgresql:postgresql${{ matrix.postgresql }}-dev
-            ghcr.io/bfren/postgresql:postgresql${{ matrix.postgresql }}-${{ steps.version.outputs.contents }}-beta
       -
         name: Image digest
         run: echo ${{ steps.docker_build.outputs.digest }}
