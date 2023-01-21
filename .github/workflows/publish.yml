@@ -82,12 +82,6 @@ jobs:
             bfren/postgresql:postgresql${{ matrix.postgresql }}-${{ steps.version.outputs.contents }}
             bfren/postgresql:postgresql${{ steps.postgresql_minor.outputs.contents }}
             bfren/postgresql:postgresql${{ steps.postgresql_minor.outputs.contents }}-${{ steps.version.outputs.contents }}
-            ghcr.io/bfren/postgresql:postgresql${{ matrix.postgresql }}
-            ghcr.io/bfren/postgresql:postgresql${{ matrix.postgresql }}-${{ steps.version_major.outputs.contents }}
-            ghcr.io/bfren/postgresql:postgresql${{ matrix.postgresql }}-${{ steps.version_minor.outputs.contents }}
-            ghcr.io/bfren/postgresql:postgresql${{ matrix.postgresql }}-${{ steps.version.outputs.contents }}
-            ghcr.io/bfren/postgresql:postgresql${{ steps.postgresql_minor.outputs.contents }}
-            ghcr.io/bfren/postgresql:postgresql${{ steps.postgresql_minor.outputs.contents }}-${{ steps.version.outputs.contents }}
       -
         name: Image digest
         run: echo ${{ steps.docker_build.outputs.digest }}
