@@ -5,16 +5,16 @@ LABEL org.opencontainers.image.source="https://github.com/bfren/docker-postgresq
 ARG BF_IMAGE
 ARG BF_VERSION
 
+EXPOSE 5432
+
+COPY ./overlay /
+COPY ./12/overlay /
+
 ENV \
     # set to "1" to compress backup sql files
     POSTGRESQL_BACKUP_COMPRESS_FILES="0" \
     # the number of days after which backups will be deleted
     POSTGRESQL_BACKUP_KEEP_FOR_DAYS="28"
-
-EXPOSE 5432
-
-COPY ./overlay /
-COPY ./12/overlay /
 
 RUN bf-install
 
