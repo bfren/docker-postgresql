@@ -1,4 +1,4 @@
-FROM bfren/alpine-s6:alpine3.18-4.5.9
+FROM bfren/alpine-s6:alpine3.18-5.0.0-dev
 
 LABEL org.opencontainers.image.source="https://github.com/bfren/docker-postgresql"
 
@@ -12,9 +12,9 @@ COPY ./15/overlay /
 
 ENV \
     # set to "1" to compress backup sql files
-    POSTGRESQL_BACKUP_COMPRESS_FILES="0" \
+    BF_PG_BACKUP_COMPRESS_FILES="0" \
     # the number of days after which backups will be deleted
-    POSTGRESQL_BACKUP_KEEP_FOR_DAYS="28"
+    BF_PG_BACKUP_KEEP_FOR_DAYS="28"
 
 RUN bf-install
 

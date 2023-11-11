@@ -1,0 +1,15 @@
+#!/usr/bin/nu
+
+use bf
+use bf-postgresql
+use bf-s6
+bf env load -x postgresql
+
+# Stop server and terminate container
+def main [...args] {
+    # stop server gracefully
+    bf-postgresql ctl stop
+
+    # terminate container
+    bf-s6 svc finish --terminate
+}
