@@ -5,8 +5,14 @@ use bf-postgresql
 use bf-s6
 bf env load -x postgresql
 
-# Stop server and terminate container
+# Stop server and terminate container, unless we are restoring from a backup
 def main [...args] {
+    # check whether or not we are restoring from a backup
+    if (bf-postgresql restore is_restoring) {
+        bf write debug "A restore operation is running: do not stop PostgreSQL or terminate the container."
+        exit 0
+    }
+
     # stop server gracefully
     bf-postgresql ctl stop
 

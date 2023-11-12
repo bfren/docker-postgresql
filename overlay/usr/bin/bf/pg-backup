@@ -1,0 +1,8 @@
+#!/usr/bin/nu
+
+use bf
+use bf-postgresql
+bf env load -x
+
+# Backup the data to a dump file, compressing if required
+def main [] { bf-postgresql backup }

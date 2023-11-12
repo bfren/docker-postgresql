@@ -1,4 +1,5 @@
 use bf
+use conf.nu
 
 # Execute a pg_ctl command as the PostgreSQL user, using the correct data directory
 def cmd [
@@ -11,8 +12,8 @@ def cmd [
     }
 }
 
-# Use pg_ctl to initialise PostgreSQL server
-export def init [] { cmd init }
+# Use pg_ctl to initialise PostgreSQL server and then regenerate configuration
+export def init [] { cmd init ; conf generate }
 
 # Use pg_ctl to restart PostgreSQL server
 export def restart [] { cmd restart }
