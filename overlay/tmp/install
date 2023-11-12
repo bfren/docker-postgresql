@@ -21,9 +21,6 @@ def main [] {
     bf write "Creating PostgreSQL run directory."
     mkdir /run/postgresql
 
-    # store default crontab as an esh template
-    cp /etc/crontabs/root $"(bf env ETC)/templates/root.esh"
-
     # add bf-postgresql module to config
     bf config use bf-postgresql
 }
