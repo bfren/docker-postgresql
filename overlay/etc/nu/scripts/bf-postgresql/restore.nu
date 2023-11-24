@@ -9,48 +9,53 @@ export def is_restoring [] { bf env check $restoring }
 
 # Restore the data from a dump file
 export def main [] {
-    # if restore file does not exist, return
-    let restore_file = check_restore_file
-    if not $restore_file.exists {
-        bf write "Restore file not found." backup/restore
+    # if dump file does not exist, return
+    let dump_file = check_dump_file
+    if not $dump_file.exists {
+        bf write "Dump file not found." restore
         return
     }
 
     # mark as restoring so the container is not brought down when we stop the PostgreSQL service
-    bf write "Restoring data from backup dump." backup/restore
+    bf write "Restoring cluster from dump file." restore
     bf env set $restoring 1
 
     # stop the PostgreSQL service
-    bf write " .. stopping PostgreSQL service" backup/restore
+    bf write debug " .. stopping PostgreSQL service" restore
     ctl stop
 
     # delete data files
     let data = bf env PG_DATA
-    bf write debug " .. deleting data files" backup/restore
+    bf write debug " .. deleting data files" restore
     rm -rf $"($data)/*"
 
     # restart the PostgreSQL service
+    bf write debug " .. reinitialising cluster" restore
     ctl init
     ctl start
 
     # run restore
-    bf write debug " .. restoring data" backup/restore
-    { ^pg psql -f $restore_file.path } | bf handle backup/restore
+    bf write debug " .. restoring data" restore
+    { ^pg psql -f $dump_file.path } | bf handle restore
 
     # stop the PostgreSQL service
+    bf write debug " .. stopping PostgreSQL service" restore
     ctl stop
 
-    # unset restoring variable and delete restore file
+    # unset restoring variable and delete dump file
     bf env unset $restoring
-    rm -f $restore_file.path
+    rm -f $dump_file.path
+
+    # if we get here there have been no errors
+    bf write ok "Done." restore
 }
 
-# Get details of a restore file - returns a record with the following values, having decompressed the file if required
-#  - exists: bool   Whether or not a restore file exists
-#  - path: string   Absolute path to the restore file if it exists, or null
-def check_restore_file [] {
+# Get details of a dump file - returns a record with the following values, having decompressed the file if required
+#  - exists: bool   Whether or not a dump file exists
+#  - path: string   Absolute path to the dump file if it exists, or null
+def check_dump_file [] {
     # get file paths
-    let file = bf env PG_RESTORE_FILE_WITHOUT_EXT
+    let file = bf env PG_DUMP_FILE_WITHOUT_EXT
     let compressed_file = $"($file).bz2"
     let sql_file = $"($file).sql"
 
@@ -59,7 +64,7 @@ def check_restore_file [] {
         # Flags:
         #   -d  Decompress
         #   -f  Force
-        { ^bzip2 -d -f $compressed_file } | bf handle
+        { ^pg bzip2 -d -f $compressed_file } | bf handle restore/check_dump_file
     }
 
     # if the sql file exists, return it
@@ -70,8 +75,20 @@ def check_restore_file [] {
     }
 }
 
+# Restore cluster from a backup dump file
 export def from [
-    date: string
+    backup: string    # Restore the dump file this backup directory
 ] {
+    # ensure requested backup directory exists
+    let backup_dir = $"(bf env PG_BACKUP)/($backup)"
+    if ($backup_dir | bf fs is_not_dir) { bf write error $"Backup directory ($backup_dir) does not exist." restore/from }
 
+    # ensure a dump file exists within requested backup directory
+    let dump_file = glob $"($backup_dir)/(bf env PG_DUMP_FILE_WITHOUT_EXT).*" | str join
+    if ($dump_file | bf fs is_not_file) { bf write error $"Cannot find a dump file in ($backup_dir)." restore/from }
+
+    # copy dump file to backup root and run restore function
+    bf write $"Copying dump file from backup ($backup)." restore/from
+    cp --force $dump_file (bf env PG_BACKUP)
+    main
 }

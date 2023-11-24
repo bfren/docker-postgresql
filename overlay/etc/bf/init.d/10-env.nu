@@ -9,10 +9,10 @@ def main [] {
     bf env set PG_DATA_HBA_CONF $"($data)/pg_hba.conf"
 
     let backup = "/backup"
-    let dump_basename = "dump"
+    let backup_basename = "dump"
     bf env set PG_BACKUP $backup
-    bf env set PG_DUMP_BASENAME $dump_basename
-    bf env set PG_RESTORE_FILE_WITHOUT_EXT $"($backup)/($dump_basename)"
+    bf env set PG_DUMP_BASENAME $backup_basename
+    bf env set PG_DUMP_FILE_WITHOUT_EXT $"($backup)/($backup_basename)"
 
     let version = "PG_VERSION"
     let data_version_file = $"($data)/($version)"

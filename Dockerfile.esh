@@ -18,4 +18,4 @@ ENV \
 
 RUN bf-install
 
-VOLUME [ "/data", "/backup" ]
+VOLUME [ "/backup", "/data" ]
