@@ -84,7 +84,7 @@ export def from [
     if ($backup_dir | bf fs is_not_dir) { bf write error $"Backup directory ($backup_dir) does not exist." restore/from }
 
     # ensure a dump file exists within requested backup directory
-    let dump_file = glob $"($backup_dir)/(bf env PG_DUMP_FILE_WITHOUT_EXT).*" | str join
+    let dump_file = glob $"/backup/($backup)/(bf env PG_DUMP_BASENAME).*" | str join
     if ($dump_file | bf fs is_not_file) { bf write error $"Cannot find a dump file in ($backup_dir)." restore/from }
 
     # copy dump file to backup root and run restore function

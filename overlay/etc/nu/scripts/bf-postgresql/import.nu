@@ -1,4 +1,5 @@
 use bf
+use db.nu
 use ctl.nu
 
 # A file named $name.sql will be used from the root of the /backup directory
@@ -11,7 +12,7 @@ export def main [
 
     # ensure the database exists
     bf write $"Importing database ($name) from sql file." import
-    if not (ctl database_exists $name) {
+    if not (db exists $name) {
         bf write debug " .. creating database"
         { ^pg createdb $"($name)" $"--owner=(bf env PG_USERNAME)" } | bf handle import
     }
