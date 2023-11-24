@@ -13,8 +13,8 @@ COPY ./14/overlay /
 ENV \
     # set to "1" to compress backup sql files
     BF_PG_BACKUP_COMPRESS_FILES="0" \
-    # the number of days after which backups will be deleted
-    BF_PG_BACKUP_KEEP_FOR_DAYS="28"
+    # the duration for which backups will be kept
+    BF_PG_BACKUP_KEEP_FOR="28day"
 
 RUN bf-install
 

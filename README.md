@@ -40,10 +40,10 @@ See [For Backups](#for-backups) for configuration variables.
 
 ### For Backups
 
-| Variable                   | Values                       | Description                                              | Default |
-| -------------------------- | ---------------------------- | -------------------------------------------------------- | ------- |
-| `PG_BACKUP_COMPRESS_FILES` | 0 or 1                       | Whether or not to compress backup files (using gzip).    | 0       |
-| `PG_BACKUP_KEEP_FOR_DAYS`  | 0: keep forever<br>Num: days | How many days to keep backups before auto-deleting them. | 14      |
+| Variable                      | Values        | Description                                           | Default   |
+| ----------------------------- | ------------- | ----------------------------------------------------- | --------- |
+| `PG_BACKUP_COMPRESS_FILES`    | 0 or 1        | Whether or not to compress backup files (using bzip). | 0         |
+| `BF_PG_BACKUP_KEEP_FOR`       | Nu duration   | The length of time to keep backups.                   | 28day     |
 
 ### For Database
 
