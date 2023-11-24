@@ -5,7 +5,7 @@ use bf
 # Setup and install PostgreSQL
 def main [] {
     # add PostgreSQL user
-    bf user add pgsql
+    bf user add postgres
 
     # get PostgreSQL version and install
     cd /tmp
