@@ -17,7 +17,7 @@ def main [] {
         exit 1
     }
 
-    # run restore (if the file exists)
+    # run restore
     bf-postgresql restore
 
     # create data if it doesn't exist
