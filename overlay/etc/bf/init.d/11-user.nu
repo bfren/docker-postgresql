@@ -15,7 +15,6 @@ def main [] {
     }
 
     # create user account and set password
-    bf write $"Adding user ($user)."
     bf user add --uid 1001 $user
     { $"($pass)\n($pass)" | ^passwd $user } | bf handle
 }
