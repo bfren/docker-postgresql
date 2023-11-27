@@ -30,5 +30,5 @@ export def get_all [] {
 
     # execute SQL and process response
     let sql = "SELECT datname FROM pg_database;"
-    { ^pg psql -c $sql | ^tail -n+3 | ^head -n-2 | ^xargs } | bf handle -d "Selecting PostgreSQL databases" | split row " " | where {|x| $x not-in $ignore } | compact
+    { ^pg psql -c $sql | ^tail -n+3 | ^head -n-2 | ^xargs } | bf handle -d "Selecting PostgreSQL databases" ctl/get_all | split row " " | where {|x| $x not-in $ignore } | compact
 }
