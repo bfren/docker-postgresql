@@ -1,19 +1,18 @@
-#!/command/with-contenv sh
+#!/bin/withenv sh
 
 set -euo pipefail
-export BF_E=`basename ${0}`
 
 
 #======================================================================================================================
-# Check arguments.
-#   1   Database name
+# Run preflight checks
 #======================================================================================================================
 
-[[ -z "${1-}" ]] && bf-error "You must provide the name of the database to check."
+nu -c "use bf-postgresql run ; run preflight"
 
 
 #======================================================================================================================
-# Query psql to see if database exists.
+# Run as PostgreSQL user
+#   -D  path to the data directory
 #======================================================================================================================
 
-psql -U postgres -l | grep -w "${1}" | wc -l
+pg postgres -D "${BF_PG_DATA}"

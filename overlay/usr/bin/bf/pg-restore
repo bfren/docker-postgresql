@@ -1,0 +1,12 @@
+#!/usr/bin/nu
+
+use bf
+use bf-postgresql
+bf env load -x
+
+# Restore the data from a dump file
+def main [
+    backup: string    # Restore the dump file this backup directory
+] {
+    bf-postgresql restore from $backup
+}

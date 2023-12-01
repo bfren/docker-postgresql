@@ -1,52 +1,26 @@
-#!/bin/sh
+#!/usr/bin/nu
 
-set -euo pipefail
-export BF_E=`basename ${0}`
+use bf
 
+# Setup and install PostgreSQL
+def main [] {
+    # add PostgreSQL user
+    bf user add postgres
 
-#======================================================================================================================
-# Add postgres user.
-#======================================================================================================================
+    # get PostgreSQL version and install
+    cd /tmp
+    let version = bf fs read POSTGRESQL_BUILD
+    let major = $version | split row "." | first
+    bf write $"Installing PostgreSQL v($version)."
+    bf pkg install [$"postgresql($major)=($version)"]
 
-bf-adduser postgres
+    # save PostgreSQL version to build log
+    bf build add PostgreSQL $version
 
+    # create run directory
+    bf write "Creating PostgreSQL run directory."
+    mkdir /run/postgresql
 
-#======================================================================================================================
-# Get PostgreSQL version.
-#======================================================================================================================
-
-cd /tmp
-
-VERSION=$(cat POSTGRESQL_BUILD)
-bf-echo "PostgreSQL version ${VERSION}."
-
-
-#======================================================================================================================
-# Install PostgreSQL and dependencies.
-#======================================================================================================================
-
-bf-echo "Installing PostgreSQL v${VERSION}..."
-
-MAJOR_VERSION="$(echo ${VERSION} | cut -c 1-2)"
-apk add --no-cache \
-    postgresql${MAJOR_VERSION}=${VERSION}
-
-bf-done
-
-
-#======================================================================================================================
-# Create PostgreSQL directories.
-#======================================================================================================================
-
-bf-echo "Creating PostgreSQL directories."
-
-mkdir /data
-mkdir /backup
-mkdir /run/postgresql
-
-
-#======================================================================================================================
-# Store default crontab as a template.
-#======================================================================================================================
-
-cp /etc/crontabs/root /etc/bf/templates/crontab.esh
+    # add bf-postgresql module to config
+    bf config use bf-postgresql
+}

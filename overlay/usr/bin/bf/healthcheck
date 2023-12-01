@@ -1,14 +1,10 @@
-#!/command/with-contenv sh
+#!/bin/withenv sh
 
 set -euo pipefail
-export BF_E=`basename ${0}`
 
 
 #======================================================================================================================
-# Perform a basic sql command to check the server is running.
+# Perform a basic sql command to check the server is running
 #======================================================================================================================
 
-CHECK=$(psql -U postgres -c "SELECT 1;" 2> /dev/null | tail -n3 | head -n1 | xargs || echo "0")
-
-[[ "${CHECK}" == "1" ]] && exit 0
-exit 1
+exit $(psql -U ${BF_PG_USERNAME} -c "SELECT 0;" 2> /dev/null | tail -n3 | head -n1 | xargs || echo "1")

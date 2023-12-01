@@ -1,0 +1,12 @@
+#!/usr/bin/nu
+
+use bf
+use bf-postgresql
+bf env load -x
+
+# Export a database to a script file
+def main [
+    name: string    # The name of the database to export
+] {
+    bf-postgresql export $name
+}

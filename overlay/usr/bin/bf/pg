@@ -1,11 +1,10 @@
-#!/command/with-contenv sh
+#!/bin/withenv sh
 
 set -euo pipefail
-export BF_E=`basename ${0}`
 
 
 #======================================================================================================================
-# Run library export executable with first argument.
+# Run a command as postgres user
 #======================================================================================================================
 
-s6-setuidgid postgres ${POSTGRESQL_LIB}/export "${1-}"
+s6-setuidgid postgres "$@"
