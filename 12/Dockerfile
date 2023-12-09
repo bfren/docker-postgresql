@@ -1,4 +1,4 @@
-FROM bfren/alpine-s6:alpine3.18-5.0.5
+FROM bfren/alpine-s6:alpine3.18-5.1.0
 
 LABEL org.opencontainers.image.source="https://github.com/bfren/docker-postgresql"
 

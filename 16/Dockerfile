@@ -8,7 +8,7 @@ ARG BF_VERSION
 EXPOSE 5432
 
 COPY ./overlay /
-COPY ./14/overlay /
+COPY ./16/overlay /
 
 ENV \
     # set to "1" to compress backup sql files
