@@ -1,4 +1,4 @@
-FROM bfren/alpine-s6:alpine<%= ${ALPINE_EDITION} %>-<%= ${BASE_VERSION} %>
+FROM bfren/alpine-s6:alpine3.19-5.1.0
 
 LABEL org.opencontainers.image.source="https://github.com/bfren/docker-postgresql"
 
@@ -8,7 +8,7 @@ ARG BF_VERSION
 EXPOSE 5432
 
 COPY ./overlay /
-COPY ./<%= ${POSTGRESQL_MAJOR} %>/overlay /
+COPY ./16/overlay /
 
 ENV \
     # set to "1" to compress backup sql files
