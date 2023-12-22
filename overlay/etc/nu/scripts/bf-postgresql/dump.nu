@@ -8,7 +8,7 @@ export def main [] {
 
     # create backup directories
     let backup_dir = create_backup_dir
-    let temp_dir = create_temp_dir
+    let temp_dir = bf fs make_temp_dir
 
     # dump cluster and save to dump file
     let dump_file = $"($temp_dir)/(bf env PG_DUMP_BASENAME).sql"
@@ -60,15 +60,5 @@ def create_backup_dir [] {
 
     # return if directory exists
     if ($dir | bf fs is_not_dir) { bf write error "Unable to create backup directory." dump/create_backup_dir }
-    $dir
-}
-
-# Create a temporary directory
-def create_temp_dir [] {
-    # create temporary directory
-    let dir = { ^mktemp -d -t backup.XXXXXX } | bf handle dump/create_temp_dir
-
-    # return if directory exists
-    if ($dir | bf fs is_not_dir) { bf write error "Unable to create temporary directory." dump/create_temp_dir }
     $dir
 }
