@@ -1,4 +1,5 @@
 use bf
+use conf.nu
 use ctl.nu
 
 # the name of the restoring environment variable
@@ -32,6 +33,7 @@ export def main [] {
     # restart the PostgreSQL service
     bf write debug " .. reinitialising cluster" restore
     ctl init
+    conf generate
     ctl start
 
     # run restore

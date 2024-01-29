@@ -37,6 +37,7 @@ def create_empty [] {
 
     # start server
     bf-postgresql ctl init
+    bf-postgresql conf generate
     bf-postgresql ctl start
 
     # create role for user
