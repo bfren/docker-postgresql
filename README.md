@@ -4,7 +4,7 @@
 
 [Docker Repository](https://hub.docker.com/r/bfren/postgresql) - [bfren ecosystem](https://github.com/bfren/docker)
 
-[PostgreSQL](https://www.postgresql.org/) comes pre-installed (12, 13, 14 or 15) with automatic backups built-in.
+[PostgreSQL](https://www.postgresql.org/) comes pre-installed (12, 13, 14, 15 or 16) with automatic backups built-in.
 
 ## Contents
 
@@ -40,19 +40,19 @@ See [For Backups](#for-backups) for configuration variables.
 
 ### For Backups
 
-| Variable                      | Values        | Description                                           | Default   |
-| ----------------------------- | ------------- | ----------------------------------------------------- | --------- |
-| `PG_BACKUP_COMPRESS_FILES`    | 0 or 1        | Whether or not to compress backup files (using bzip). | 0         |
-| `BF_PG_BACKUP_KEEP_FOR`       | Nu duration   | The length of time to keep backups.                   | 28day     |
+| Variable                      | Values                                                                    | Description                                           | Default   |
+| ----------------------------- | ------------------------------------------------------------------------- | ----------------------------------------------------- | --------- |
+| `BF_PG_BACKUP_COMPRESS_FILES` | 0 or 1                                                                    | Whether or not to compress backup files (using bzip). | 0         |
+| `BF_PG_BACKUP_KEEP_FOR`       | [Nu duration](https://www.nushell.sh/book/types_of_data.html#durations)   | The length of time to keep backups.                   | 28day     |
 
 ### For Database
 
-| Variable          | Values | Description                                                                                              | Default   |
-| ----------------- | ------ | -------------------------------------------------------------------------------------------------------- | --------- |
-| `PG_APPLICATION`  | string | Application name - will be used as `PG_DATABASE`, `PG_PASSWORD` and `PG_USERNAME` if they are not set.   | *None*    |
-| `PG_DATABASE`     | string | Database name(s) - multiple databases can be separated by a comma.                                       | *None*    |
-| `PG_PASSWORD`     | string | Application password.                                                                                    | *None*    |
-| `PG_USERNAME`     | string | Application username.                                                                                    | *None*    |
+| Variable              | Values | Description                                                                                                      | Default   |
+| --------------------- | ------ | ---------------------------------------------------------------------------------------------------------------- | --------- |
+| `BF_PG_APPLICATION`   | string | Application name - will be used as `BF_PG_DATABASE`, `BF_PG_PASSWORD` and `BF_PG_USERNAME` if they are not set.  | *None*    |
+| `BF_PG_DATABASE`      | string | Database name(s) - multiple databases can be separated by a comma.                                               | *None*    |
+| `BF_PG_PASSWORD`      | string | Application password.                                                                                            | *None*    |
+| `BF_PG_USERNAME`      | string | Application username.                                                                                            | *None*    |
 
 ## Helper Functions
 

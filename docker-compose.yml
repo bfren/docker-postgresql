@@ -1,0 +1,21 @@
+version: "3.8"
+
+services:
+  pgsql:
+    image: bfren/postgresql:postgresql16
+    container_name: pgsql
+    restart: unless-stopped
+    environment:
+      - BF_PG_BACKUP_COMPRESS_FILES=1
+      - BF_PG_BACKUP_KEEP_FOR=2month
+      - BF_PG_APPLICATION=test
+    volumes:
+      - ./v/db:/data
+      - ./v/db-backup:/backup
+    networks:
+      - pgsql
+
+networks:
+  pgsql:
+    driver: bridge
+    name: pgsql
