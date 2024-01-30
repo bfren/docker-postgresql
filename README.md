@@ -40,10 +40,10 @@ See [For Backups](#for-backups) for configuration variables.
 
 ### For Backups
 
-| Variable                      | Values        | Description                                           | Default   |
-| ----------------------------- | ------------- | ----------------------------------------------------- | --------- |
-| `BF_PG_BACKUP_COMPRESS_FILES` | 0 or 1        | Whether or not to compress backup files (using bzip). | 0         |
-| `BF_PG_BACKUP_KEEP_FOR`       | Nu duration   | The length of time to keep backups.                   | 28day     |
+| Variable                      | Values                                                                    | Description                                           | Default   |
+| ----------------------------- | ------------------------------------------------------------------------- | ----------------------------------------------------- | --------- |
+| `BF_PG_BACKUP_COMPRESS_FILES` | 0 or 1                                                                    | Whether or not to compress backup files (using bzip). | 0         |
+| `BF_PG_BACKUP_KEEP_FOR`       | [Nu duration](https://www.nushell.sh/book/types_of_data.html#durations)   | The length of time to keep backups.                   | 28day     |
 
 ### For Database
 
