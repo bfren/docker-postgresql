@@ -6,6 +6,8 @@ services:
     container_name: pgsql
     restart: unless-stopped
     environment:
+      - BF_PG_BACKUP_COMPRESS_FILES=1
+      - BF_PG_BACKUP_KEEP_FOR=2month
       - BF_PG_APPLICATION=test
     volumes:
       - ./v/db:/data
