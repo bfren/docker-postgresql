@@ -33,8 +33,8 @@ See [For Backups](#for-backups) for configuration variables.
 
 | Volume    | Purpose                                                                                           |
 | --------- | ------------------------------------------------------------------------------------------------- |
-| `/data`   | Data files.                                                                                       |
 | `/backup` | Backup files (also used for export / import scripts - see [helper functions](#helper-functions)). |
+| `/data`   | Data files.                                                                                       |
 
 ## Environment Variables
 
@@ -51,8 +51,8 @@ See [For Backups](#for-backups) for configuration variables.
 | --------------------- | ------ | ---------------------------------------------------------------------------------------------------------------- | --------- |
 | `BF_PG_APPLICATION`   | string | Application name - will be used as `BF_PG_DATABASE`, `BF_PG_PASSWORD` and `BF_PG_USERNAME` if they are not set.  | *None*    |
 | `BF_PG_DATABASE`      | string | Database name(s) - multiple databases can be separated by a comma.                                               | *None*    |
-| `BF_PG_PASSWORD`      | string | Application password.                                                                                            | *None*    |
-| `BF_PG_USERNAME`      | string | Application username.                                                                                            | *None*    |
+| `BF_PG_PASSWORD`      | string | Application password - required if `BF_PG_APPLICATION` is not                                                    | *None*    |
+| `BF_PG_USERNAME`      | string | Application username - required if `BF_PG_APPLICATION` is not used.                                              | *None*    |
 
 ## Helper Functions
 
