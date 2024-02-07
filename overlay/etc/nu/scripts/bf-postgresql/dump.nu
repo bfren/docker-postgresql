@@ -37,11 +37,11 @@ export def main [] {
 
     # move files to backup directory
     bf write debug $" .. moving files to ($backup_dir)" dump
-    mv $"($temp_dir)/*" $backup_dir
+    echo $"($temp_dir)/*" | mv $in $backup_dir
 
     # delete temporary directory
     bf write debug $" .. deleting ($temp_dir)" dump
-    rm -rf $temp_dir
+   bf del force $temp_dir
 
     # cleanup old backup files
     bf write debug " .. removing expired backup files" dump
