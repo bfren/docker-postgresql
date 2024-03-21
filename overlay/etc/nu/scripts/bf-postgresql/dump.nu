@@ -37,7 +37,7 @@ export def main [] {
 
     # move files to backup directory
     bf write debug $" .. moving files to ($backup_dir)" dump
-    echo $"($temp_dir)/*" | mv $in $backup_dir
+    echo $"($temp_dir)/*" | into glob | mv $in $backup_dir
 
     # delete temporary directory
     bf write debug $" .. deleting ($temp_dir)" dump
