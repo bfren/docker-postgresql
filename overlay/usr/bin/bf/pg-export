@@ -8,5 +8,5 @@ bf env load -x
 def main [
     name: string    # The name of the database to export
 ] {
-    bf-postgresql export $name
+    $name | bf-postgresql export
 }

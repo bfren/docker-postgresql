@@ -1,10 +1,11 @@
 use bf
 use db.nu
 
-# Database $name will be exported as a sql file to the root backup directory
-export def main [
-    name: string    # The name of the database to export
-] {
+# Database will be exported as a sql file to the root backup directory
+export def main [] {
+    # capture database name
+    let name = $in
+
     # create path to export file
     let export_file = $"(bf env PG_BACKUP)/($name).sql"
 

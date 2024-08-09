@@ -1,11 +1,11 @@
 use bf
 use db.nu
-use ctl.nu
 
-# A file named $name.sql will be used from the root of the /backup directory
-export def main [
-    name: string    # The name of the database to import
-] {
+# Import database from the root of the /backup directory
+export def main [] {
+    # capture database name
+    let name = $in
+
     # ensure the file exists
     let import_file = $"(bf env PG_BACKUP)/($name).sql"
     if ($import_file | bf fs is_not_file) { bf write error $"Cannot find import file ($import_file)." import }
