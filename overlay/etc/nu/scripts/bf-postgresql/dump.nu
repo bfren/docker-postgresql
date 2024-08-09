@@ -3,14 +3,13 @@ use db.nu
 
 # Backup the cluster to a dump file, compressing if required
 export def main [] {
-    # set variables
-    bf write $"Dumping data cluster." dump
-
     # create backup directories
+    bf write debug "Creating temporary directories." dump
     let backup_dir = create_backup_dir
     let temp_dir = bf fs make_temp_dir
 
     # dump cluster and save to dump file
+    bf write $"Dumping data cluster." dump
     let dump_file = $"($temp_dir)/(bf env PG_DUMP_BASENAME).sql"
     bf write debug $" .. to ($dump_file)" dump
     { ^pg pg_dumpall --clean --if-exists } | bf handle -s {|x| $x | save --force $dump_file } dump
@@ -41,11 +40,11 @@ export def main [] {
 
     # delete temporary directory
     bf write debug $" .. deleting ($temp_dir)" dump
-   bf del force $temp_dir
+    bf del force $temp_dir
 
     # cleanup old backup files
     bf write debug " .. removing expired backup files" dump
-    bf del old --type d (bf env PG_BACKUP) (bf env PG_BACKUP_KEEP_FOR | into duration)
+    bf del old --live --type d (bf env PG_BACKUP) (bf env PG_BACKUP_KEEP_FOR | into duration)
 
     # if we get here there have been no errors
     bf write ok "Done." dump

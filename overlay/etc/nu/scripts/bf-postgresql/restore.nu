@@ -79,7 +79,7 @@ def check_dump_file [] {
 
 # Restore cluster from a backup dump file
 export def from [
-    backup: string    # Restore the dump file this backup directory
+    backup: string    # Restore the dump file from this backup directory
 ] {
     # ensure requested backup directory exists
     let backup_dir = $"(bf env PG_BACKUP)/($backup)"

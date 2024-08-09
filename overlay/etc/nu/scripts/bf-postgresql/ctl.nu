@@ -8,7 +8,7 @@ def cmd [
     try {
         ^pg pg_ctl $command -D $"(bf env PG_DATA)"
     } catch {
-        bf write error $"There was an error running pg_ctl ($command)."
+        bf write error $"There was an error running pg_ctl ($command)." ctl/cmd
     }
 }
 
