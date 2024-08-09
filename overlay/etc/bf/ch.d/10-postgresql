@@ -1,3 +1,0 @@
-/backup postgres:postgres 0600 0700
-/data postgres:postgres 0600 0700
-/run/postgresql postgres:postgres 0600 0700
