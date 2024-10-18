@@ -28,7 +28,7 @@ export def main [] {
     # delete data files
     let data = bf env PG_DATA
     bf write debug " .. deleting data files" restore
-    bf del force $"($data)/*"
+    $"($data)/*" | into glob | rm --force --recursive $in
 
     # restart the PostgreSQL service
     bf write debug " .. reinitialising cluster" restore
@@ -46,7 +46,7 @@ export def main [] {
 
     # unset restoring variable and delete dump file
     bf env unset $restoring
-    bf del force $dump_file.path
+    rm --force $dump_file.path
 
     # if we get here there have been no errors
     bf write ok "Done." restore
