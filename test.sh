@@ -2,7 +2,7 @@
 
 IMAGE=postgresql
 VERSION=`cat VERSION`
-POSTGRESQL=${1:-16}
+POSTGRESQL=${1:-17}
 TAG=${IMAGE}-test
 
 docker buildx build \
