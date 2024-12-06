@@ -4,10 +4,10 @@ set -euo pipefail
 
 docker pull bfren/alpine
 
-BASE_VERSION="5.4.15"
+BASE_VERSION="5.5.0"
 echo "Base: ${BASE_VERSION}"
 
-POSTGRESQL_VERSIONS="12 13 14 15 16"
+POSTGRESQL_VERSIONS="12 13 14 15 16 17"
 for V in ${POSTGRESQL_VERSIONS} ; do
 
     echo "PostgreSQL ${V}"
@@ -15,7 +15,7 @@ for V in ${POSTGRESQL_VERSIONS} ; do
     if [ -f "${ALPINE_EDITION_FILE}" ] ; then
         ALPINE_EDITION=`cat ${ALPINE_EDITION_FILE}`
     else
-        ALPINE_EDITION="3.20"
+        ALPINE_EDITION="3.21"
     fi
 
     DOCKERFILE=$(docker run \
