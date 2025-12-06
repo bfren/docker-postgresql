@@ -10,7 +10,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        postgresql: [ "12", "13", "14", "15", "16", "17" ]
+        postgresql: [ "12", "13", "14", "15", "16", "17", "18" ]
     runs-on: ubuntu-latest
     steps:
       -

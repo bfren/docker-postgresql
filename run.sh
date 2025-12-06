@@ -1,7 +1,7 @@
 #!/bin/sh
 
 IMAGE=`cat VERSION`
-POSTGRESQL=${1:-17}
+POSTGRESQL=${1:-18}
 
 docker buildx build \
     --load \
