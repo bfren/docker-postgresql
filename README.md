@@ -4,7 +4,7 @@
 
 [Docker Repository](https://hub.docker.com/r/bfren/postgresql) - [bfren ecosystem](https://github.com/bfren/docker)
 
-[PostgreSQL](https://www.postgresql.org/) comes pre-installed (12, 13, 14, 15 or 16) with automatic backups built-in.
+[PostgreSQL](https://www.postgresql.org/) comes pre-installed (12, 13, 14, 15, 16, 17 and 18) with automatic backups built-in.
 
 ## Contents
 
