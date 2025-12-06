@@ -7,7 +7,7 @@ docker pull bfren/alpine
 BASE_VERSION="6.1.0"
 echo "Base: ${BASE_VERSION}"
 
-POSTGRESQL_VERSIONS="12 13 14 15 16 17"
+POSTGRESQL_VERSIONS="12 13 14 15 16 17 18"
 for V in ${POSTGRESQL_VERSIONS} ; do
 
     echo "PostgreSQL ${V}"
