@@ -1,4 +1,4 @@
-FROM quay.io/bfren/alpine-s6:alpine3.23-6.1.0
+FROM quay.io/bfren/alpine-s6:alpine3.23-6.1.1
 
 LABEL org.opencontainers.image.source="https://github.com/bfren/docker-postgresql"
 
@@ -9,7 +9,7 @@ ARG BF_VERSION
 EXPOSE 5432
 
 COPY ./overlay /
-COPY ./17/overlay /
+COPY ./18/overlay /
 
 ENV \
     # set to "1" to compress backup sql files
