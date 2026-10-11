@@ -5,7 +5,8 @@ use bf-postgresql
 use bf-s6
 bf env load -x postgresql
 
-# Stop server and terminate container, unless we are restoring from a backup
+# Terminate container, unless we are restoring from a backup
+# PostgreSQL itself is stopped by s6 using the signal in ./down-signal (SIGINT = fast shutdown)
 def main [...args] {
     # check whether or not we are restoring from a backup
     if (bf-postgresql restore is_restoring) {
@@ -13,9 +14,6 @@ def main [...args] {
         exit 0
     }
 
-    # stop server gracefully
-    bf-postgresql ctl stop
-
     # terminate container
-    bf-s6 svc finish --terminate
+    bf-s6 svc finish --terminate ...$args
 }
