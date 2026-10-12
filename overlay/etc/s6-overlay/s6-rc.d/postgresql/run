@@ -1,18 +1,32 @@
-#!/bin/withenv sh
+#!/usr/bin/nu
 
-set -euo pipefail
+use bf
+use bf-postgresql ["restore is_restoring"]
+use bf-s6
+bf env load
 
+# Start PostgreSQL as the postgres user
+def main [
+    name: string    # The service name, passed by s6-supervise
+] {
+    # set executable name - used to make log output more useful
+    bf env x_set --override run $name
 
-#======================================================================================================================
-# Run preflight checks
-#======================================================================================================================
+    # run checks before executing service
+    if (restore is_restoring) {
+        let for = 5sec
+        bf write $"A backup is being restored so sleep for ($for)."
+        sleep $for
 
-nu -c "use bf-postgresql run ; run preflight"
+        # exit cleanly - S6 will automatically restart the service
+        exit 0
+    }
 
-
-#======================================================================================================================
-# Run as PostgreSQL user
-#   -D  path to the data directory
-#======================================================================================================================
-
-exec pg postgres -D "${BF_PG_DATA}"
+    # flags:
+    #   -D  path to the data directory
+    bf write "Starting PostgreSQL."
+    let args = [
+        "-D" (bf env PG_DATA)
+    ]
+    bf-s6 svc launch s6-setuidgid postgres postgres ...$args
+}
