@@ -1,8 +1,7 @@
-export module conf.nu
-export module ctl.nu
-export module db.nu
-export module dump.nu
-export module export.nu
-export module import.nu
-export module restore.nu
-export module run.nu
+export use conf.nu
+export use ctl.nu
+export use db.nu
+export use dump.nu
+export use export-db.nu
+export use import.nu
+export use restore.nu
