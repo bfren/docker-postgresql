@@ -19,7 +19,7 @@ export def main [] {
 
     # execute script file using psql
     bf write debug " .. executing script file" import
-    { ^pg psql -f $import_file $name } | bf handle import
+    { open --raw $import_file | ^pg psql $name } | bf handle import
 
     # if we get here there have been no errors
     bf write ok "Done."

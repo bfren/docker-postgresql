@@ -17,7 +17,7 @@ export def main [] {
     # compress dump file
     if (bf env check PG_BACKUP_COMPRESS_FILES) {
         bf write debug " .. compressing dump file" dump
-        { ^pg bzip2 $dump_file } | bf handle dump
+        { ^bzip2 $dump_file } | bf handle dump
     }
 
     # get list of individual databases and back them up
@@ -30,7 +30,7 @@ export def main [] {
         # compress backup file
         if (bf env check PG_BACKUP_COMPRESS_FILES) {
             bf write debug "    compressing backup file" dump
-            { ^pg bzip2 $backup_file } | bf handle dump
+            { ^bzip2 $backup_file } | bf handle dump
         }
     }
 
@@ -50,9 +50,8 @@ export def main [] {
     bf write ok "Done." dump
 }
 
-# Create a backup directory
-def create_backup_dir [] {
-    # create temporary directory
+# Create a backup directory named by date and time (yyyyMMddHHmm), and return its path
+export def create_backup_dir []: nothing -> string {
     let date = date now | format date "%Y%m%d%H%M"
     let dir = $"(bf env PG_BACKUP)/($date)"
     mkdir $dir

@@ -4,4 +4,6 @@ export use db.nu
 export use dump.nu
 export use export-db.nu
 export use import.nu
+export use init.nu
 export use restore.nu
+export use versions.nu
