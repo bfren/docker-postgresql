@@ -7,4 +7,4 @@ set -euo pipefail
 # Perform a basic sql command to check the server is running
 #======================================================================================================================
 
-exit $(psql -U ${BF_PG_USERNAME} -c "SELECT 0;" 2> /dev/null | tail -n3 | head -n1 | xargs || echo "1")
+exit $(psql -U ${BF_PG_USERNAME} -d postgres -c "SELECT 0;" 2> /dev/null | tail -n3 | head -n1 | xargs || echo "1")
