@@ -1,5 +1,3 @@
-version: "3.8"
-
 services:
   pgsql:
     image: bfren/postgresql:postgresql16
@@ -7,7 +5,7 @@ services:
     restart: unless-stopped
     environment:
       - BF_PG_BACKUP_COMPRESS_FILES=1
-      - BF_PG_BACKUP_KEEP_FOR=2month
+      - BF_PG_BACKUP_KEEP_FOR=56day
       - BF_PG_APPLICATION=test
     volumes:
       - ./v/db:/data
