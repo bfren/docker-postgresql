@@ -17,7 +17,7 @@ It is built on [Alpine + S6](https://github.com/bfren/docker-alpine-s6), with Po
 ```yaml
 services:
   db:
-    image: quay.io/bfren/postgresql:postgresql18-4.2
+    image: quay.io/bfren/postgresql:postgresql18-4.3
     restart: unless-stopped
     environment:
       - BF_PG_APPLICATION=myapp
@@ -55,14 +55,14 @@ docker compose exec db pg psql myapp      # in the myapp database
 
 Images are published to Docker Hub (`bfren/postgresql`) and Quay.io (`quay.io/bfren/postgresql`) for `linux/amd64`, `linux/arm/v7` and `linux/arm64`. There is no `latest` tag - choose a PostgreSQL version.
 
-| Tag                     | Example                 | Use when                                           |
-| ----------------------- | ----------------------- | -------------------------------------------------- |
-| `postgresqlN`           | `postgresql18`          | You want the latest image for a PostgreSQL version |
-| `postgresqlN-MAJOR`     | `postgresql18-4`        | You want updates, but not breaking changes         |
-| `postgresqlN-MINOR`     | `postgresql18-4.2`      | You want fixes only - **recommended**              |
-| `postgresqlN-VERSION`   | `postgresql18-4.2.16`   | You want to pin this image exactly                 |
-| `postgresqlN.M`         | `postgresql18.6`        | You want an exact PostgreSQL release               |
-| `postgresqlN.M-VERSION` | `postgresql18.6-4.2.16` | You want to pin both                               |
+| Tag                     | Example                | Use when                                           |
+| ----------------------- | ---------------------- | -------------------------------------------------- |
+| `postgresqlN`           | `postgresql18`         | You want the latest image for a PostgreSQL version |
+| `postgresqlN-MAJOR`     | `postgresql18-4`       | You want updates, but not breaking changes         |
+| `postgresqlN-MINOR`     | `postgresql18-4.3`     | You want fixes only - **recommended**              |
+| `postgresqlN-VERSION`   | `postgresql18-4.3.0`   | You want to pin this image exactly                 |
+| `postgresqlN.M`         | `postgresql18.6`       | You want an exact PostgreSQL release               |
+| `postgresqlN.M-VERSION` | `postgresql18.6-4.3.0` | You want to pin both                               |
 
 | PostgreSQL | Release | Alpine | Supported until |
 | ---------- | ------- | ------ | --------------- |
