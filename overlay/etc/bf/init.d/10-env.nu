@@ -1,4 +1,5 @@
 use bf
+use bf-postgresql
 bf env load
 
 # Set environment variables
@@ -20,10 +21,10 @@ def main [] {
     bf env set PG_DATA_VERSION_FILE $data_version_file
     bf env set PG_SERVER_VERSION (bf fs read --quiet $"/usr/libexec/postgresql/($version)")
 
-    let application = bf env --safe PG_APPLICATION
-    bf env set PG_USERNAME (bf env PG_USERNAME $application)
-    bf env set PG_PASSWORD (bf env PG_PASSWORD $application)
-    bf env set PG_DATABASE (bf env PG_DATABASE $application)
+    let credentials = bf-postgresql init credentials
+    bf env set PG_USERNAME $credentials.username
+    bf env set PG_PASSWORD $credentials.password
+    bf env set PG_DATABASE $credentials.database
 
     # return nothing
     return

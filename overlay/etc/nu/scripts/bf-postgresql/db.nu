@@ -1,9 +1,12 @@
 use bf
 
+# System databases - these are not backed up individually
+export const system_databases = ["postgres" "template0" "template1"]
+
 # Returns true if database $name exists in the cluster
 export def exists [
     name: string    # Database name
-] {
+]: nothing -> bool {
     $name in (get_all)
 }
 
@@ -11,7 +14,7 @@ export def exists [
 export def dump [
     name: string    # The name of the database to dump
     file: string    # The path to save the dump script to
-] {
+]: nothing -> nothing {
     # ensure the database exists
     if not (exists $name) { bf write error $"Database ($name) does not exist." db/dump }
 
@@ -20,16 +23,20 @@ export def dump [
 }
 
 # Get a list of databases, ignoring system databases
-export def get_all [] {
-    # ignore these databases
-    let ignore = [
-        "postgres"
-        "template0"
-        "template1"
-    ]
-
-    # execute SQL and process response
+export def get_all []: nothing -> list<string> {
+    # flags:
+    #   -A  unaligned output
+    #   -t  only output rows (no headers or footers)
     let sql = "SELECT datname FROM pg_database;"
-    let dmp = "Selecting PostgreSQL databases"
-    { ^pg psql -c $sql | ^tail -n+3 | ^head -n-2 | ^xargs } | bf handle -d $dmp db/get_all | split row " " | where {|x| $x not-in $ignore } | compact
+    { ^pg psql -At -c $sql } | bf handle -d "Selecting PostgreSQL databases" db/get_all | lines | without_system
+}
+
+# Split a comma-separated list of database names (e.g. BF_PG_DATABASE), removing spaces and empty names
+export def names []: string -> list<string> {
+    split row "," | str trim | where {|x| $x != "" }
+}
+
+# Remove system databases and empty values from a list of database names
+export def without_system []: list<string> -> list<string> {
+    str trim | where {|x| $x != "" and $x not-in $system_databases }
 }

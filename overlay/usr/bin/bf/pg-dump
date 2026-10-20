@@ -2,7 +2,11 @@
 
 use bf
 use bf-postgresql
+use bf-s6
 bf env load -x
 
-# Dump data cluster
-def main [] { bf-postgresql dump }
+# Dump data cluster, then apply permissions to the backup files
+def main [] {
+    bf-postgresql dump
+    bf-s6 ch apply_file "10-backup"
+}
