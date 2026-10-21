@@ -47,7 +47,7 @@ export def commands__are_executable_and_parse [] {
 
 export def healthcheck__connects_to_postgres_database [] {
     # the application user's database may not have the same name as the user
-    assert ((open --raw /usr/bin/bf/bf-healthcheck) =~ '-d postgres') "the health check should use the postgres database"
+    assert ((open --raw /etc/bf/health.d/10-postgres.nu) =~ '"-d"\s+"postgres"') "the health check should use the postgres database"
 }
 
 
