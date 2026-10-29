@@ -42,7 +42,7 @@ docker compose exec db pg psql myapp      # in the myapp database
 
 ## Features
 
-* 🐘 PostgreSQL 12 to 18 - choose with the image tag
+* 🐘 PostgreSQL 14 to 18 - choose with the image tag
 * 🚀 User and database(s) created on first start, as a UTF-8 cluster
 * 💾 Every database backed up every eight hours, optionally compressed, with old backups deleted automatically
 * ♻️ Restore a backup with one command - or by leaving it in `/backup` before the container starts
@@ -71,8 +71,6 @@ Images are published to Docker Hub (`bfren/postgresql`) and Quay.io (`quay.io/bf
 | 16         | 16.15   | 3.24   | November 2028   |
 | 15         | 15.19   | 3.22   | November 2027   |
 | 14         | 14.17   | 3.20   | November 2026   |
-| 13         | 13.20   | 3.19   | ended           |
-| 12         | 12.20   | 3.18   | ended           |
 
 PostgreSQL supports each major version for five years - see the [versioning policy](https://www.postgresql.org/support/versioning/). Older versions still work, but get no more fixes: use them only to get existing data out.
 
@@ -190,7 +188,7 @@ The health check (inherited from the base image: every 30 seconds) connects as t
 ./generate-dockerfiles.sh   # regenerates the Dockerfiles from Dockerfile.esh
 ```
 
-`/test` runs this image's tests alongside the base images' tests: credentials, creating the cluster, user and databases, version checks, backups (including compression and expiry), restore, export and import - using a stub `pg` command, so no server is needed - and the installed commands and configuration. Run it on an old and a new version, e.g. `./test.nu 12` and `./test.nu 18`.
+`/test` runs this image's tests alongside the base images' tests: credentials, creating the cluster, user and databases, version checks, backups (including compression and expiry), restore, export and import - using a stub `pg` command, so no server is needed - and the installed commands and configuration. Run it on an old and a new version, e.g. `./test.nu 14` and `./test.nu 18`.
 
 ## Troubleshooting
 
