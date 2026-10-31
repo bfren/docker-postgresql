@@ -1,0 +1,36 @@
+name: build
+
+on:
+  push:
+    branches: ['**']
+    tags-ignore: ['**']
+  release:
+    types: [published]
+  workflow_dispatch:
+
+jobs:
+  build:
+    uses: bfren/docker/.github/workflows/build.yml@shared-build
+    with:
+      image: postgresql
+      folders: |
+        14
+        15
+        16
+        17
+        18
+      platforms: |
+        linux/amd64
+        linux/arm/v7
+        linux/arm64
+      tags: |
+        postgresql${FOLDER}
+        postgresql${FOLDER}-${VERSION_MAJOR}
+        postgresql${FOLDER}-${VERSION_MINOR}
+        postgresql${FOLDER}-${VERSION}
+        postgresql${POSTGRESQL_MINOR}
+        postgresql${POSTGRESQL_MINOR}-${VERSION}
+    secrets:
+      DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+      DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
+      QUAY_TOKEN: ${{ secrets.QUAY_TOKEN }}

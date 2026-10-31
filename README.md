@@ -1,6 +1,6 @@
 # PostgreSQL
 
-![GitHub release (latest by date)](https://img.shields.io/github/v/release/bfren/docker-postgresql) ![Docker Pulls](https://img.shields.io/endpoint?url=https%3A%2F%2Fbfren.dev%2Fdocker%2Fpulls%2Fpostgresql) ![Docker Image Size](https://img.shields.io/endpoint?url=https%3A%2F%2Fbfren.dev%2Fdocker%2Fsize%2Fpostgresql) ![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/bfren/docker-postgresql/dev.yml?branch=main)
+![GitHub release (latest by date)](https://img.shields.io/github/v/release/bfren/docker-postgresql) ![Docker Pulls](https://img.shields.io/endpoint?url=https%3A%2F%2Fbfren.dev%2Fdocker%2Fpulls%2Fpostgresql) ![Docker Image Size](https://img.shields.io/endpoint?url=https%3A%2F%2Fbfren.dev%2Fdocker%2Fsize%2Fpostgresql) ![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/bfren/docker-postgresql/build.yml?branch=main)
 
 [Docker Hub](https://hub.docker.com/r/bfren/postgresql) - [Quay.io](https://quay.io/repository/bfren/postgresql) - [bfren ecosystem](https://github.com/bfren/docker)
 
