@@ -1,4 +1,4 @@
-FROM quay.io/bfren/alpine-s6:alpine3.20-6.7.3
+FROM quay.io/bfren/alpine-s6:alpine3.20-7.0.0-dev
 
 LABEL org.opencontainers.image.source="https://github.com/bfren/docker-postgresql"
 

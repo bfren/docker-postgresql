@@ -1,6 +1,6 @@
 # PostgreSQL
 
-![GitHub release (latest by date)](https://img.shields.io/github/v/release/bfren/docker-postgresql) ![Docker Pulls](https://img.shields.io/endpoint?url=https%3A%2F%2Fbfren.dev%2Fdocker%2Fpulls%2Fpostgresql) ![Docker Image Size](https://img.shields.io/endpoint?url=https%3A%2F%2Fbfren.dev%2Fdocker%2Fsize%2Fpostgresql) ![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/bfren/docker-postgresql/dev.yml?branch=main)
+![GitHub release (latest by date)](https://img.shields.io/github/v/release/bfren/docker-postgresql) ![Docker Pulls](https://img.shields.io/endpoint?url=https%3A%2F%2Fbfren.dev%2Fdocker%2Fpulls%2Fpostgresql) ![Docker Image Size](https://img.shields.io/endpoint?url=https%3A%2F%2Fbfren.dev%2Fdocker%2Fsize%2Fpostgresql) ![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/bfren/docker-postgresql/build.yml?branch=main)
 
 [Docker Hub](https://hub.docker.com/r/bfren/postgresql) - [Quay.io](https://quay.io/repository/bfren/postgresql) - [bfren ecosystem](https://github.com/bfren/docker)
 
@@ -17,7 +17,7 @@ It is built on [Alpine + S6](https://github.com/bfren/docker-alpine-s6), with Po
 ```yaml
 services:
   db:
-    image: quay.io/bfren/postgresql:postgresql18-4.3
+    image: quay.io/bfren/postgresql:postgresql18-6.0
     restart: unless-stopped
     environment:
       - BF_PG_APPLICATION=myapp
@@ -58,11 +58,11 @@ Images are published to Docker Hub (`bfren/postgresql`) and Quay.io (`quay.io/bf
 | Tag                     | Example                | Use when                                           |
 | ----------------------- | ---------------------- | -------------------------------------------------- |
 | `postgresqlN`           | `postgresql18`         | You want the latest image for a PostgreSQL version |
-| `postgresqlN-MAJOR`     | `postgresql18-4`       | You want updates, but not breaking changes         |
-| `postgresqlN-MINOR`     | `postgresql18-4.3`     | You want fixes only - **recommended**              |
-| `postgresqlN-VERSION`   | `postgresql18-4.3.0`   | You want to pin this image exactly                 |
+| `postgresqlN-MAJOR`     | `postgresql18-6`       | You want updates, but not breaking changes         |
+| `postgresqlN-MINOR`     | `postgresql18-6.0`     | You want fixes only - **recommended**              |
+| `postgresqlN-VERSION`   | `postgresql18-6.0.0`   | You want to pin this image exactly                 |
 | `postgresqlN.M`         | `postgresql18.6`       | You want an exact PostgreSQL release               |
-| `postgresqlN.M-VERSION` | `postgresql18.6-4.3.0` | You want to pin both                               |
+| `postgresqlN.M-VERSION` | `postgresql18.6-6.0.0` | You want to pin both                               |
 
 | PostgreSQL | Release | Alpine | Supported until |
 | ---------- | ------- | ------ | --------------- |
