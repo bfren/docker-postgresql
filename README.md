@@ -17,7 +17,7 @@ It is built on [Alpine + S6](https://github.com/bfren/docker-alpine-s6), with Po
 ```yaml
 services:
   db:
-    image: quay.io/bfren/postgresql:postgresql18-4.3
+    image: quay.io/bfren/postgresql:postgresql18-6.0
     restart: unless-stopped
     environment:
       - BF_PG_APPLICATION=myapp
@@ -58,11 +58,11 @@ Images are published to Docker Hub (`bfren/postgresql`) and Quay.io (`quay.io/bf
 | Tag                     | Example                | Use when                                           |
 | ----------------------- | ---------------------- | -------------------------------------------------- |
 | `postgresqlN`           | `postgresql18`         | You want the latest image for a PostgreSQL version |
-| `postgresqlN-MAJOR`     | `postgresql18-4`       | You want updates, but not breaking changes         |
-| `postgresqlN-MINOR`     | `postgresql18-4.3`     | You want fixes only - **recommended**              |
-| `postgresqlN-VERSION`   | `postgresql18-4.3.0`   | You want to pin this image exactly                 |
+| `postgresqlN-MAJOR`     | `postgresql18-6`       | You want updates, but not breaking changes         |
+| `postgresqlN-MINOR`     | `postgresql18-6.0`     | You want fixes only - **recommended**              |
+| `postgresqlN-VERSION`   | `postgresql18-6.0.0`   | You want to pin this image exactly                 |
 | `postgresqlN.M`         | `postgresql18.6`       | You want an exact PostgreSQL release               |
-| `postgresqlN.M-VERSION` | `postgresql18.6-4.3.0` | You want to pin both                               |
+| `postgresqlN.M-VERSION` | `postgresql18.6-6.0.0` | You want to pin both                               |
 
 | PostgreSQL | Release | Alpine | Supported until |
 | ---------- | ------- | ------ | --------------- |
