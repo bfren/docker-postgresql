@@ -38,20 +38,39 @@ export def main [] {
     conf generate
     ctl start
 
-    # run restore
+    # run restore - psql carries on after an SQL error and still exits 0, so errors are saved to a log and counted
     bf write debug " .. restoring data" restore
-    { open --raw $dump_file.path | ^pg psql } | bf handle restore
+    let log = $"($dump_file.path).log"
+    { open --raw $dump_file.path | ^pg psql e> $log } | bf handle restore
 
     # stop the PostgreSQL service
     bf write debug " .. stopping PostgreSQL service" restore
     ctl stop
 
-    # unset restoring variable and delete dump file
+    # unset restoring variable and keep the dump file, renamed so it is not restored again
     bf env unset $restoring
-    rm --force $dump_file.path
+    mv --force $dump_file.path $"($dump_file.path).restored"
+
+    # warn about errors, which may mean the data was only partly restored
+    let count = errors $log | length
+    if $count > 0 {
+        bf write notok $"($count) error\(s\) during restore - see ($log)." restore
+        return
+    }
 
     # if we get here there have been no errors
     bf write ok "Done." restore
+}
+
+# Return the errors in a psql log, ignoring the ones every restore of a pg_dumpall dump causes: the dump drops and
+# creates the postgres role, which already exists in the new cluster and cannot be dropped by itself
+export def errors [
+    log: string # Path to the psql stderr log
+]: nothing -> list<string> {
+    let expected = ['current user cannot be dropped' 'role "postgres" already exists']
+    open --raw $log
+        | lines
+        | where {|x| ($x | str contains "ERROR:") and not ($expected | any {|e| $x | str contains $e }) }
 }
 
 # Get details of a dump file - returns a record with the following values, having decompressed the file if required

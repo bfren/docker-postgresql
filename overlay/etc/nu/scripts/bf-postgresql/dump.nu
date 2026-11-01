@@ -12,7 +12,8 @@ export def main [] {
     bf write $"Dumping data cluster." dump
     let dump_file = $"($temp_dir)/(bf env PG_DUMP_BASENAME).sql"
     bf write debug $" .. to ($dump_file)" dump
-    { ^pg pg_dumpall --clean --if-exists } | bf handle -s {|x| $x | save --force $dump_file } dump
+    # streamed, not through bf handle which would hold the whole dump in memory - a failure still stops the script
+    ^pg pg_dumpall --clean --if-exists o> $dump_file
 
     # compress dump file
     if (bf env check PG_BACKUP_COMPRESS_FILES) {

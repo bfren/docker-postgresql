@@ -6,6 +6,9 @@ export def main [] {
     # capture database name
     let name = $in
 
+    # the dump file in the backup root is restored over the whole cluster on the next start
+    if $name == (bf env PG_DUMP_BASENAME) { bf write error $"A database called ($name) cannot be exported." export }
+
     # create path to export file
     let export_file = $"(bf env PG_BACKUP)/($name).sql"
 
