@@ -1,6 +1,6 @@
 # PostgreSQL
 
-![GitHub release (latest by date)](https://img.shields.io/github/v/release/bfren/docker-postgresql) ![Docker Pulls](https://img.shields.io/endpoint?url=https%3A%2F%2Fbfren.dev%2Fdocker%2Fpulls%2Fpostgresql) ![Docker Image Size](https://img.shields.io/endpoint?url=https%3A%2F%2Fbfren.dev%2Fdocker%2Fsize%2Fpostgresql) ![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/bfren/docker-postgresql/dev.yml?branch=main)
+![GitHub release (latest by date)](https://img.shields.io/github/v/release/bfren/docker-postgresql) ![Docker Pulls](https://img.shields.io/endpoint?url=https%3A%2F%2Fbfren.dev%2Fdocker%2Fpulls%2Fpostgresql) ![Docker Image Size](https://img.shields.io/endpoint?url=https%3A%2F%2Fbfren.dev%2Fdocker%2Fsize%2Fpostgresql) ![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/bfren/docker-postgresql/build.yml?branch=main)
 
 [Docker Hub](https://hub.docker.com/r/bfren/postgresql) - [Quay.io](https://quay.io/repository/bfren/postgresql) - [bfren ecosystem](https://github.com/bfren/docker)
 
@@ -17,7 +17,7 @@ It is built on [Alpine + S6](https://github.com/bfren/docker-alpine-s6), with Po
 ```yaml
 services:
   db:
-    image: quay.io/bfren/postgresql:postgresql18-4.3
+    image: quay.io/bfren/postgresql:postgresql18-6.0
     restart: unless-stopped
     environment:
       - BF_PG_APPLICATION=myapp
@@ -58,11 +58,11 @@ Images are published to Docker Hub (`bfren/postgresql`) and Quay.io (`quay.io/bf
 | Tag                     | Example                | Use when                                           |
 | ----------------------- | ---------------------- | -------------------------------------------------- |
 | `postgresqlN`           | `postgresql18`         | You want the latest image for a PostgreSQL version |
-| `postgresqlN-MAJOR`     | `postgresql18-4`       | You want updates, but not breaking changes         |
-| `postgresqlN-MINOR`     | `postgresql18-4.3`     | You want fixes only - **recommended**              |
-| `postgresqlN-VERSION`   | `postgresql18-4.3.0`   | You want to pin this image exactly                 |
+| `postgresqlN-MAJOR`     | `postgresql18-6`       | You want updates, but not breaking changes         |
+| `postgresqlN-MINOR`     | `postgresql18-6.0`     | You want fixes only - **recommended**              |
+| `postgresqlN-VERSION`   | `postgresql18-6.0.0`   | You want to pin this image exactly                 |
 | `postgresqlN.M`         | `postgresql18.6`       | You want an exact PostgreSQL release               |
-| `postgresqlN.M-VERSION` | `postgresql18.6-4.3.0` | You want to pin both                               |
+| `postgresqlN.M-VERSION` | `postgresql18.6-6.0.0` | You want to pin both                               |
 
 | PostgreSQL | Release | Alpine | Supported until |
 | ---------- | ------- | ------ | --------------- |
@@ -142,11 +142,11 @@ At a random minute every eight hours (00:xx, 08:xx and 16:xx in `BF_TZ`), `pg-du
 
 `pg-restore <folder>` restores a backup folder's `dump.sql` (or `dump.sql.bz2`), e.g. `pg-restore 202610171608`. It **replaces the whole cluster**: PostgreSQL is stopped, `/data` is emptied, a new cluster is created from the dump, and PostgreSQL starts again.
 
-You can also restore while the container is stopped: put `dump.sql` or `dump.sql.bz2` in the root of `/backup` and start the container. The dump file is deleted once it has been restored.
+You can also restore while the container is stopped: put `dump.sql` or `dump.sql.bz2` in the root of `/backup` and start the container. The dump file is renamed `dump.sql.restored` once it has been restored, and `psql`'s errors are saved to `dump.sql.log` - check `docker logs` for a warning that some statements failed.
 
 ### Export and import
 
-* `pg-export <database>` saves `/backup/<database>.sql`.
+* `pg-export <database>` saves `/backup/<database>.sql` - except for a database called `dump`, because `/backup/dump.sql` is restored over the whole cluster on the next start.
 * `pg-import <database>` runs `/backup/<database>.sql` in that database, creating it (owned by the application user) if it doesn't exist. Files from `pg-export` and the per-database backup files drop and recreate the tables they contain.
 
 To move a database between containers, `pg-export` in one, copy the file to the other's `/backup`, then `pg-import`.

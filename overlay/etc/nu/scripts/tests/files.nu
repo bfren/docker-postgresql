@@ -57,6 +57,18 @@ export def restore__fails_when_backup_has_no_dump [] {
     assert error { with-env $env_vars { bf-postgresql restore from "202601010000" } }
 }
 
+export def restore_errors__ignores_errors_every_restore_causes [] {
+    let log = mktemp
+    [
+        'psql:/backup/dump.sql:14: ERROR:  current user cannot be dropped'
+        'psql:/backup/dump.sql:20: ERROR:  role "postgres" already exists'
+        'psql:/backup/dump.sql:95: ERROR:  syntax error at or near "INSER"'
+        'psql:/backup/dump.sql:96: NOTICE:  table "x" does not exist, skipping'
+    ] | str join "\n" | save --force $log
+
+    assert equal ['psql:/backup/dump.sql:95: ERROR:  syntax error at or near "INSER"'] (bf-postgresql restore errors $log)
+}
+
 
 #======================================================================================================================
 # export and import
@@ -69,6 +81,15 @@ export def export__saves_database_to_backup_root [] {
     helpers with_stubs $stubs { with-env $env_vars { "app" | bf-postgresql export-db } }
 
     assert ((open --raw $"($env_vars.BF_PG_BACKUP)/app.sql") starts-with "-- dump")
+}
+
+export def export__refuses_the_dump_file_name [] {
+    # /backup/dump.sql would replace the whole cluster on the next start
+    let stubs = helpers stubs
+    let env_vars = helpers pg_env
+
+    assert error { helpers with_stubs $stubs { with-env $env_vars { "dump" | bf-postgresql export-db } } }
+    assert not ($"($env_vars.BF_PG_BACKUP)/dump.sql" | path exists)
 }
 
 export def import__runs_file_through_stdin [] {

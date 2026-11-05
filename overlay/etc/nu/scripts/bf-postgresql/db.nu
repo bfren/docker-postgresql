@@ -18,8 +18,9 @@ export def dump [
     # ensure the database exists
     if not (exists $name) { bf write error $"Database ($name) does not exist." db/dump }
 
-    # dump database and save to specified file
-    { ^pg pg_dump --clean --if-exists $name } | bf handle -s {|x| $x | save --force $file } db/dump
+    # dump database and save to specified file - streamed rather than through bf handle, which would hold the whole
+    # dump in memory (a failure still stops the script)
+    ^pg pg_dump --clean --if-exists $name o> $file
 }
 
 # Get a list of databases, ignoring system databases
