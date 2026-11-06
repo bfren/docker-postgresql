@@ -32,5 +32,4 @@ for V in ${POSTGRESQL_VERSIONS} ; do
 
 done
 
-docker system prune -f
 echo "Done."
