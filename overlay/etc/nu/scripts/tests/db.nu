@@ -11,6 +11,10 @@ export def names__splits_on_commas_and_removes_spaces [] {
     assert equal ["one" "two" "three"] ("one, two ,three" | db names)
 }
 
+export def names__splits_on_spaces [] {
+    assert equal ["one" "two" "three"] ("one two  three" | db names)
+}
+
 export def names__ignores_empty_names [] {
     assert equal ["one"] ("one,, ," | db names)
     assert equal [] ("" | db names)

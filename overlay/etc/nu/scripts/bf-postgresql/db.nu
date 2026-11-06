@@ -32,9 +32,9 @@ export def get_all []: nothing -> list<string> {
     { ^pg psql -At -c $sql } | bf handle -d "Selecting PostgreSQL databases" db/get_all | lines | without_system
 }
 
-# Split a comma-separated list of database names (e.g. BF_PG_DATABASE), removing spaces and empty names
+# Split a list of database names (e.g. BF_PG_DATABASE) separated by commas and / or spaces, removing empty names
 export def names []: string -> list<string> {
-    split row "," | str trim | where {|x| $x != "" }
+    split row --regex '[\s,]+' | where {|x| $x != "" }
 }
 
 # Remove system databases and empty values from a list of database names

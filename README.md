@@ -100,7 +100,7 @@ Everything in the volumes is owned by `postgres` (UID / GID 1000), and only read
 | `BF_PG_APPLICATION`           | string                                                                  | Default for `BF_PG_USERNAME`, `BF_PG_PASSWORD` and `BF_PG_DATABASE`. |         |
 | `BF_PG_USERNAME`              | string                                                                  | Application user - created on first start.                           |         |
 | `BF_PG_PASSWORD`              | string                                                                  | Application user's password - set on first start.                    |         |
-| `BF_PG_DATABASE`              | names                                                                   | Database(s) created on first start - separate several with commas.   |         |
+| `BF_PG_DATABASE`              | names                                                                   | Database(s) created on first start - separate with commas or spaces. |         |
 | `BF_PG_BACKUP_COMPRESS_FILES` | `0`, `1`                                                                | Compress backup files with bzip2.                                    | `0`     |
 | `BF_PG_BACKUP_KEEP_FOR`       | [Nu duration](https://www.nushell.sh/book/types_of_data.html#durations) | How long to keep backups, e.g. `14day` or `8wk` (Nu has no months).  | `28day` |
 
