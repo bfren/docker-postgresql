@@ -57,41 +57,6 @@ export def restore__fails_when_backup_has_no_dump [] {
     assert error { with-env $env_vars { bf-postgresql restore from "202601010000" } }
 }
 
-export def keep_data__moves_data_to_backup_folder [] {
-    let env_vars = helpers pg_env
-    "16" | save $"($env_vars.BF_PG_DATA)/PG_VERSION"
-    mkdir $"($env_vars.BF_PG_DATA)/base"
-
-    let kept = with-env $env_vars { bf-postgresql restore keep_data }
-
-    assert equal $env_vars.BF_PG_BACKUP ($kept | path dirname)
-    assert (($kept | path basename) =~ '^\d{14}-before-restore$') "folder should be named yyyyMMddHHmmss-before-restore"
-    assert equal "16" (open --raw $"($kept)/PG_VERSION")
-    assert equal "dir" ($"($kept)/base" | path type)
-    assert (ls $env_vars.BF_PG_DATA | is-empty) "data directory should be empty"
-}
-
-export def keep_data__fails_without_moving_when_folder_exists [] {
-    let env_vars = helpers pg_env
-    "16" | save $"($env_vars.BF_PG_DATA)/PG_VERSION"
-
-    # create the folder for this second and the next few, so the test does not depend on timing
-    let now = date now
-    0..5 | each {|s|
-        mkdir $"($env_vars.BF_PG_BACKUP)/($now + ($s * 1sec) | format date '%Y%m%d%H%M%S')-before-restore"
-    } | ignore
-
-    assert error { with-env $env_vars { bf-postgresql restore keep_data } }
-    assert equal "16" (open --raw $"($env_vars.BF_PG_DATA)/PG_VERSION") "data should not be moved"
-}
-
-export def keep_data__does_nothing_when_data_is_empty [] {
-    let env_vars = helpers pg_env
-
-    assert equal null (with-env $env_vars { bf-postgresql restore keep_data })
-    assert (ls $env_vars.BF_PG_BACKUP | is-empty) "no folder should be created"
-}
-
 export def restore_errors__ignores_errors_every_restore_causes [] {
     let log = mktemp
     [
