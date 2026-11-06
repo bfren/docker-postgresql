@@ -62,15 +62,21 @@ export def main [] {
     bf write ok "Done." restore
 }
 
-# Move the files in the data directory to <backup>/<yyyyMMddHHmm>-before-restore, so they can be recovered if a restore
-# goes wrong (the folder expires like any other backup) - returns its path, or null if the data directory was empty
+# Move the files in the data directory to <backup>/<yyyyMMddHHmmss>-before-restore, so they can be recovered if a
+# restore goes wrong (the folder expires like any other backup) - returns its path, or null if the data directory was
+# empty
 export def keep_data []: nothing -> any {
     let data = bf env PG_DATA
     if (ls $data | is-empty) { return }
 
-    let dir = $"(bf env PG_BACKUP)/(date now | format date '%Y%m%d%H%M')-before-restore"
+    # never move into an existing folder - mv would overwrite or skip files there without an error
+    let dir = $"(bf env PG_BACKUP)/(date now | format date '%Y%m%d%H%M%S')-before-restore"
+    if ($dir | path exists) { bf write error $"($dir) already exists - wait a second and try again." restore/keep_data }
     mkdir $dir
     $"($data)/*" | into glob | mv $in $dir
+
+    # mv does not fail if some files cannot be moved (e.g. the disk is full), so check nothing was left behind
+    if (ls $data | is-not-empty) { bf write error $"Unable to move all files from ($data) to ($dir)." restore/keep_data }
     $dir
 }
 
