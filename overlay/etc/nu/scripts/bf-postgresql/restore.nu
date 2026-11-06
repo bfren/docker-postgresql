@@ -27,10 +27,10 @@ export def main [] {
         ctl stop
     }
 
-    # delete data files
-    let data = bf env PG_DATA
-    bf write debug " .. deleting data files" restore
-    $"($data)/*" | into glob | rm --force --recursive $in
+    # move the current data out of the way - psql still exits 0 when statements fail, so a bad dump would otherwise
+    # leave a partial cluster with the old data gone
+    let kept = keep_data
+    if $kept != null { bf write $" .. current data moved to ($kept)." restore }
 
     # restart the PostgreSQL service
     bf write debug " .. reinitialising cluster" restore
@@ -60,6 +60,18 @@ export def main [] {
 
     # if we get here there have been no errors
     bf write ok "Done." restore
+}
+
+# Move the files in the data directory to <backup>/<yyyyMMddHHmm>-before-restore, so they can be recovered if a restore
+# goes wrong (the folder expires like any other backup) - returns its path, or null if the data directory was empty
+export def keep_data []: nothing -> any {
+    let data = bf env PG_DATA
+    if (ls $data | is-empty) { return }
+
+    let dir = $"(bf env PG_BACKUP)/(date now | format date '%Y%m%d%H%M')-before-restore"
+    mkdir $dir
+    $"($data)/*" | into glob | mv $in $dir
+    $dir
 }
 
 # Return the errors in a psql log, ignoring the ones every restore of a pg_dumpall dump causes: the dump drops and
