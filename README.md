@@ -142,6 +142,8 @@ At a random minute every eight hours (00:xx, 08:xx and 16:xx in `BF_TZ`), `pg-du
 
 `pg-restore <folder>` restores a backup folder's `dump.sql` (or `dump.sql.bz2`), e.g. `pg-restore 202610171608`. It **replaces the whole cluster**: PostgreSQL is stopped, `/data` is emptied, a new cluster is created from the dump, and PostgreSQL starts again.
 
+**Back up first.** The current data is deleted before the dump is loaded, and `psql` carries on past errors - so a bad or incomplete dump leaves a partly restored cluster, with no way back to the data you had. Before restoring, run `pg-dump` (it saves the current cluster in a new backup folder), or stop the container and copy `/data` somewhere safe. The [upgrade steps](#version-check) below do this too.
+
 You can also restore while the container is stopped: put `dump.sql` or `dump.sql.bz2` in the root of `/backup` and start the container. The dump file is renamed `dump.sql.restored` once it has been restored, and `psql`'s errors are saved to `dump.sql.log` - check `docker logs` for a warning that some statements failed.
 
 ### Export and import
