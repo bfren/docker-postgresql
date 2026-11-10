@@ -60,9 +60,9 @@ Images are published to Docker Hub (`bfren/postgresql`) and Quay.io (`quay.io/bf
 | `postgresqlN`           | `postgresql18`         | You want the latest image for a PostgreSQL version |
 | `postgresqlN-MAJOR`     | `postgresql18-6`       | You want updates, but not breaking changes         |
 | `postgresqlN-MINOR`     | `postgresql18-6.0`     | You want fixes only - **recommended**              |
-| `postgresqlN-VERSION`   | `postgresql18-6.0.1`   | You want to pin this image exactly                 |
+| `postgresqlN-VERSION`   | `postgresql18-6.0.2`   | You want to pin this image exactly                 |
 | `postgresqlN.M`         | `postgresql18.6`       | You want an exact PostgreSQL release               |
-| `postgresqlN.M-VERSION` | `postgresql18.6-6.0.1` | You want to pin both                               |
+| `postgresqlN.M-VERSION` | `postgresql18.6-6.0.2` | You want to pin both                               |
 
 | PostgreSQL | Release | Alpine | Supported until |
 | ---------- | ------- | ------ | --------------- |
@@ -100,7 +100,7 @@ Everything in the volumes is owned by `postgres` (UID / GID 1000), and only read
 | `BF_PG_APPLICATION`           | string                                                                  | Default for `BF_PG_USERNAME`, `BF_PG_PASSWORD` and `BF_PG_DATABASE`. |         |
 | `BF_PG_USERNAME`              | string                                                                  | Application user - created on first start.                           |         |
 | `BF_PG_PASSWORD`              | string                                                                  | Application user's password - set on first start.                    |         |
-| `BF_PG_DATABASE`              | names                                                                   | Database(s) created on first start - separate several with commas.   |         |
+| `BF_PG_DATABASE`              | names                                                                   | Database(s) created on first start - separate with commas or spaces. |         |
 | `BF_PG_BACKUP_COMPRESS_FILES` | `0`, `1`                                                                | Compress backup files with bzip2.                                    | `0`     |
 | `BF_PG_BACKUP_KEEP_FOR`       | [Nu duration](https://www.nushell.sh/book/types_of_data.html#durations) | How long to keep backups, e.g. `14day` or `8wk` (Nu has no months).  | `28day` |
 
@@ -141,6 +141,8 @@ At a random minute every eight hours (00:xx, 08:xx and 16:xx in `BF_TZ`), `pg-du
 ### Restore
 
 `pg-restore <folder>` restores a backup folder's `dump.sql` (or `dump.sql.bz2`), e.g. `pg-restore 202610171608`. It **replaces the whole cluster**: PostgreSQL is stopped, `/data` is emptied, a new cluster is created from the dump, and PostgreSQL starts again.
+
+**Back up first.** The current data is deleted before the dump is loaded, and `psql` carries on past errors - so a bad or incomplete dump leaves a partly restored cluster, with no way back to the data you had. Before restoring, run `pg-dump` (it saves the current cluster in a new backup folder), or stop the container and copy `/data` somewhere safe. The [upgrade steps](#version-check) below do this too.
 
 You can also restore while the container is stopped: put `dump.sql` or `dump.sql.bz2` in the root of `/backup` and start the container. The dump file is renamed `dump.sql.restored` once it has been restored, and `psql`'s errors are saved to `dump.sql.log` - check `docker logs` for a warning that some statements failed.
 
