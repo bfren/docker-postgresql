@@ -63,17 +63,17 @@ Images are published to Docker Hub (`bfren/postgresql`) and Quay.io (`quay.io/bf
 | `postgresqlN-MAJOR`     | `postgresql18-6`       | You want updates, but not breaking changes         |
 | `postgresqlN-MINOR`     | `postgresql18-6.0`     | You want fixes only - **recommended**              |
 | `postgresqlN-VERSION`   | `postgresql18-6.0.3`   | You want to pin this image exactly                 |
-| `postgresqlN.M`         | `postgresql18.6`       | You want an exact PostgreSQL release               |
-| `postgresqlN.M-VERSION` | `postgresql18.6-6.0.3` | You want to pin both                               |
+| `postgresqlN.M`         | `postgresql18.7`       | You want an exact PostgreSQL release               |
+| `postgresqlN.M-VERSION` | `postgresql18.7-6.0.3` | You want to pin both                               |
 
 A new `MAJOR` version means a breaking change. Before moving to one, read the [changelog](CHANGELOG.md), where each breaking change is marked **Breaking**.
 
 | PostgreSQL | Release | Alpine | Supported until |
 | ---------- | ------- | ------ | --------------- |
-| 18         | 18.6    | 3.24   | November 2030   |
-| 17         | 17.11   | 3.24   | November 2029   |
-| 16         | 16.15   | 3.24   | November 2028   |
-| 15         | 15.19   | 3.22   | November 2027   |
+| 18         | 18.7    | 3.24   | November 2030   |
+| 17         | 17.12   | 3.24   | November 2029   |
+| 16         | 16.16   | 3.24   | November 2028   |
+| 15         | 15.20   | 3.22   | November 2027   |
 | 14         | 14.17   | 3.20   | November 2026   |
 
 PostgreSQL supports each major version for five years - see the [versioning policy](https://www.postgresql.org/support/versioning/). Older versions still work, but get no more fixes: use them only to get existing data out.

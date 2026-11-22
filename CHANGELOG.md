@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [6.0.3] - Unreleased
 
+### Changed
+
+- PostgreSQL updated to 15.20, 16.16, 17.12 and 18.7.
+
 ### Fixed
 
 - README: said your changes to `postgresql.conf` and `pg_hba.conf` are always kept - a restore writes them again, so
