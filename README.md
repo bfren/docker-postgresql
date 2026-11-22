@@ -27,6 +27,8 @@ services:
       - ./v/backup:/backup
 ```
 
+This example is also in [`docker-compose.yml`](docker-compose.yml).
+
 `.env` (keep it out of version control):
 
 ```sh

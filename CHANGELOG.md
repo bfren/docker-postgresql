@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   copy them first.
 - README: changing the password and moving a database between containers are now lists of steps, and the helper commands
   table shows how to run each command.
+- `docker-compose.yml` now matches the README Quickstart - it used PostgreSQL 16 and no password.
 
 ## [6.0.2] - 2026-11-10
 

@@ -1,19 +1,10 @@
 services:
-  pgsql:
-    image: bfren/postgresql:postgresql16
-    container_name: pgsql
+  db:
+    image: quay.io/bfren/postgresql:postgresql18-6.0
     restart: unless-stopped
     environment:
-      - BF_PG_BACKUP_COMPRESS_FILES=1
-      - BF_PG_BACKUP_KEEP_FOR=56day
-      - BF_PG_APPLICATION=test
+      - BF_PG_APPLICATION=myapp
+      - BF_PG_PASSWORD=${DB_PASSWORD}
     volumes:
-      - ./v/db:/data
-      - ./v/db-backup:/backup
-    networks:
-      - pgsql
-
-networks:
-  pgsql:
-    driver: bridge
-    name: pgsql
+      - ./v/data:/data
+      - ./v/backup:/backup
