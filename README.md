@@ -66,6 +66,8 @@ Images are published to Docker Hub (`bfren/postgresql`) and Quay.io (`quay.io/bf
 | `postgresqlN.M`         | `postgresql18.6`       | You want an exact PostgreSQL release               |
 | `postgresqlN.M-VERSION` | `postgresql18.6-6.0.3` | You want to pin both                               |
 
+A new `MAJOR` version means a breaking change. Before moving to one, read the [changelog](CHANGELOG.md), where each breaking change is marked **Breaking**.
+
 | PostgreSQL | Release | Alpine | Supported until |
 | ---------- | ------- | ------ | --------------- |
 | 18         | 18.6    | 3.24   | November 2030   |
