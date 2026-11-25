@@ -27,6 +27,8 @@ services:
       - ./v/backup:/backup
 ```
 
+This example is also in [`docker-compose.yml`](docker-compose.yml).
+
 `.env` (keep it out of version control):
 
 ```sh
@@ -60,16 +62,18 @@ Images are published to Docker Hub (`bfren/postgresql`) and Quay.io (`quay.io/bf
 | `postgresqlN`           | `postgresql18`         | You want the latest image for a PostgreSQL version |
 | `postgresqlN-MAJOR`     | `postgresql18-6`       | You want updates, but not breaking changes         |
 | `postgresqlN-MINOR`     | `postgresql18-6.0`     | You want fixes only - **recommended**              |
-| `postgresqlN-VERSION`   | `postgresql18-6.0.2`   | You want to pin this image exactly                 |
-| `postgresqlN.M`         | `postgresql18.6`       | You want an exact PostgreSQL release               |
-| `postgresqlN.M-VERSION` | `postgresql18.6-6.0.2` | You want to pin both                               |
+| `postgresqlN-VERSION`   | `postgresql18-6.0.3`   | You want to pin this image exactly                 |
+| `postgresqlN.M`         | `postgresql18.7`       | You want an exact PostgreSQL release               |
+| `postgresqlN.M-VERSION` | `postgresql18.7-6.0.3` | You want to pin both                               |
+
+A new `MAJOR` version means a breaking change. Before moving to one, read the [changelog](CHANGELOG.md), where each breaking change is marked **Breaking**.
 
 | PostgreSQL | Release | Alpine | Supported until |
 | ---------- | ------- | ------ | --------------- |
-| 18         | 18.6    | 3.24   | November 2030   |
-| 17         | 17.11   | 3.24   | November 2029   |
-| 16         | 16.15   | 3.24   | November 2028   |
-| 15         | 15.19   | 3.22   | November 2027   |
+| 18         | 18.7    | 3.24   | November 2030   |
+| 17         | 17.12   | 3.24   | November 2029   |
+| 16         | 16.16   | 3.24   | November 2028   |
+| 15         | 15.20   | 3.22   | November 2027   |
 | 14         | 14.17   | 3.20   | November 2026   |
 
 PostgreSQL supports each major version for five years - see the [versioning policy](https://www.postgresql.org/support/versioning/). Older versions still work, but get no more fixes: use them only to get existing data out.
@@ -127,7 +131,7 @@ This only happens once. Changing the variables later does **not** change the pas
 * Inside the container, any user can connect without a password (`trust`) - this is how the helper commands work.
 * From other containers and machines, users need a password (`scram-sha-256`), over IPv4 or IPv6.
 
-To change these rules or tune PostgreSQL (e.g. `shared_buffers`), edit `/data/postgresql.conf` or `/data/pg_hba.conf` and restart the container. They are only generated when a cluster is created, so your changes are kept. The server time zone is set to `GB`.
+To change these rules or tune PostgreSQL (e.g. `shared_buffers`), edit `/data/postgresql.conf` or `/data/pg_hba.conf` and restart the container. They are only generated when a cluster is created, so your changes are kept across restarts - but a [restore](#restore) creates a new cluster and writes them again, so copy your changes somewhere first and put them back afterwards. The server time zone is set to `GB`.
 
 ### Backups
 
@@ -151,7 +155,11 @@ You can also restore while the container is stopped: put `dump.sql` or `dump.sql
 * `pg-export <database>` saves `/backup/<database>.sql` - except for a database called `dump`, because `/backup/dump.sql` is restored over the whole cluster on the next start.
 * `pg-import <database>` runs `/backup/<database>.sql` in that database, creating it (owned by the application user) if it doesn't exist. Files from `pg-export` and the per-database backup files drop and recreate the tables they contain.
 
-To move a database between containers, `pg-export` in one, copy the file to the other's `/backup`, then `pg-import`.
+To move a database between containers:
+
+1. In the old container, run `pg-export <database>`.
+2. Copy `/backup/<database>.sql` into the new container's `/backup` volume.
+3. In the new container, run `pg-import <database>`.
 
 ### Version check
 
@@ -166,15 +174,15 @@ To upgrade to a newer major version, move the data across in a dump:
 
 ### Helper commands
 
-Run these with `docker exec <container> <command>`.
+Run these with `docker exec <container> <command>`, e.g. `docker exec db pg-dump`. Interactive commands need `-it`: `docker exec -it db pg psql`.
 
-| Command      | Arguments | Description                                                               |
-| ------------ | --------- | ------------------------------------------------------------------------- |
-| `pg`         | command   | Run a command as `postgres`, e.g. `pg psql` (add `-it` to `docker exec`). |
-| `pg-dump`    |           | Back up now.                                                              |
-| `pg-restore` | folder    | Replace the cluster with a backup folder's dump.                          |
-| `pg-export`  | database  | Save a database to `/backup/<database>.sql`.                              |
-| `pg-import`  | database  | Run `/backup/<database>.sql`, creating the database if needed.            |
+| Command                | Description                                                                 |
+| ---------------------- | --------------------------------------------------------------------------- |
+| `pg <command>`         | Run a command as `postgres`, e.g. `pg psql`.                                |
+| `pg-dump`              | Back up now.                                                                |
+| `pg-restore <folder>`  | Replace the whole cluster with a backup folder's dump, e.g. `202610171608`. |
+| `pg-export <database>` | Save a database to `/backup/<database>.sql`.                                |
+| `pg-import <database>` | Run `/backup/<database>.sql`, creating the database if needed.              |
 
 ### Health check
 
@@ -203,7 +211,10 @@ Check `docker logs <container>`:
 
 ### I changed the password but can't log in
 
-The password is only set on [first start](#first-start). Change it with `docker exec -it <container> pg psql -c "ALTER USER myapp PASSWORD 'new';"`, then update `BF_PG_PASSWORD` to match.
+The password is only set on [first start](#first-start), so changing the variable alone does nothing. To change it:
+
+1. Run `docker exec <container> pg psql -c "ALTER USER myapp PASSWORD 'new-password';"`. Inside the container no password is needed, so this works whatever the old one was.
+2. Update `BF_PG_PASSWORD` to match, so it is right if you ever start again with an empty `/data`.
 
 ### Another container can't connect
 

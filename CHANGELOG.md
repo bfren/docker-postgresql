@@ -5,6 +5,22 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [6.0.3] - 2026-11-25
+
+### Changed
+
+- Base image updated to `bfren/alpine-s6` 7.0.3, which rebuilds BusyBox, figlet and Nushell without changing
+  their versions - see the [Alpine + S6 changelog](https://github.com/bfren/docker-alpine-s6/blob/main/CHANGELOG.md).
+- PostgreSQL updated to 15.20, 16.16, 17.12 and 18.7.
+
+### Fixed
+
+- README: said your changes to `postgresql.conf` and `pg_hba.conf` are always kept - a restore writes them again, so
+  copy them first.
+- README: changing the password and moving a database between containers are now lists of steps, and the helper commands
+  table shows how to run each command.
+- `docker-compose.yml` now matches the README Quickstart - it used PostgreSQL 16 and no password.
+
 ## [6.0.2] - 2026-11-10
 
 ### Changed
@@ -43,6 +59,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   that much memory to back up.
 - `pg-export dump` is refused - `/backup/dump.sql` would replace the whole cluster on the next start.
 
+[6.0.3]: https://github.com/bfren/docker-postgresql/compare/v6.0.2...v6.0.3
 [6.0.2]: https://github.com/bfren/docker-postgresql/compare/v6.0.1...v6.0.2
 [6.0.1]: https://github.com/bfren/docker-postgresql/compare/v6.0.0...v6.0.1
 [6.0.0]: https://github.com/bfren/docker-postgresql/compare/v5.0.0...v6.0.0
